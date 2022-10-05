@@ -15,15 +15,14 @@ DESCRIPTION = "Looks up prices of specific items from chosen AHs"
 BONUSES_LIST_JSON = "bonuses.json"
 REGION = "eu" # eu/us
 
-
-connectedRealmIDs = {
+connected_realm_ids = {
 	1084: "Tarren Mill",
 	1303: "Aggra",
 	1096: "Defias"
 }
 
-auth_url = "https://oauth.battle.net/token"
-host = "https://eu.api.blizzard.com/"
+AUTH_URL = "https://oauth.battle.net/token"
+HOST = "https://eu.api.blizzard.com/"
 
 class Item:
 	def __init__(self, id, diff, source, name):
@@ -108,22 +107,24 @@ ITEMS = {
 	],
 }
 
-
-def getHeaderAuth():
+def get_header_auth():
 	with open("credentials", "r") as c:
 		client_id = c.readline().strip()
 		client_secret = c.readline().strip()
-	x = requests.post(auth_url, data={'grant_type': 'client_credentials'}, auth=(client_id, client_secret))
+	x = requests.post(
+		AUTH_URL, 
+		data={'grant_type': 'client_credentials'},
+		auth=(client_id, client_secret))
 	access_token = json.loads(x.text)["access_token"]
 	return {"Authorization": "Bearer " + access_token}
 
-def getBonuses():
+def get_bonuses():
 	with open(BONUSES_LIST_JSON, "r") as f:
 		return json.loads(f.read())
 
-def parseAHs():
-	bonuses = getBonuses()
-	bearer = getHeaderAuth()
+def parse_ahs():
+	bonuses = get_bonuses()
+	bearer = get_header_auth()
 	params = {
 		"namespace": f"dynamic-{REGION}",
 		"locale": "en_US",
@@ -133,15 +134,17 @@ def parseAHs():
 	for key in ITEMS:
 		out[key] = []
 
-	for ah in connectedRealmIDs:
-		x = requests.get(f"{host}data/wow/connected-realm/{ah}/auctions", headers=bearer, params=params)
+	for ah, ah_name in connected_realm_ids.items():
+		x = requests.get(
+			f"{HOST}data/wow/connected-realm/{ah}/auctions", 
+			headers=bearer, params=params)
 
 		if x.status_code != 200:
 			print("Failted to get AH data")
 			print(x)
 
 		auctions = json.loads(x.text)["auctions"]
-		print(f"There are {len(auctions)} items for auction in {connectedRealmIDs[ah]}")
+		print(f"There are {len(auctions)} items for auction in {ah_name}")
 		for auction in auctions:
 			if (id := auction['item']['id']) in ITEMS:
 				no_diff_id = True
@@ -163,31 +166,31 @@ def parseAHs():
 					out[id].append({"item": ITEMS[id][0], "auction": auction, "realm": ah})
 	return out
 
-def printItemsPretty(items):
+def print_items_pretty(items):
 	cheapest = {}
-	for id in items:
-		for item in items[id]:
-			indentifier = f'{item["item"].id}:{item["item"].diff}'
-			if indentifier not in cheapest:
-				cheapest[indentifier] = item
+	for id_group in items.values():
+		for item in id_group:
+			identifier = f'{item["item"].id}:{item["item"].diff}'
+			if identifier not in cheapest:
+				cheapest[identifier] = item
 			else:
-				if item["auction"]["buyout"] < cheapest[indentifier]["auction"]["buyout"]:
-					cheapest[indentifier]["auction"]["buyout"] = item["auction"]["buyout"]
-					cheapest[indentifier]["realm"] = item["realm"]
-				if  item["auction"].get("bid", float("inf")) < cheapest[indentifier]["auction"].get("bid", float("inf")):
-					cheapest[indentifier]["auction"]["bid"] = item["auction"].get("bid")
-					if cheapest[indentifier]["realm"] != item["realm"]:
-						cheapest[indentifier]["bidOnDiffRealm"] = item["realm"]
+				if item["auction"]["buyout"] < cheapest[identifier]["auction"]["buyout"]:
+					cheapest[identifier]["auction"]["buyout"] = item["auction"]["buyout"]
+					cheapest[identifier]["realm"] = item["realm"]
+				if  item["auction"].get("bid", float("inf")) < cheapest[identifier]["auction"].get("bid", float("inf")):
+					cheapest[identifier]["auction"]["bid"] = item["auction"].get("bid")
+					if cheapest[identifier]["realm"] != item["realm"]:
+						cheapest[identifier]["bidOnDiffRealm"] = item["realm"]
 	
-	sorted = []
+	sorted_items = []
 	while len(cheapest):
 		smallest = float("inf")
-		smallestKey = ""
-		for item in cheapest:
-			if cheapest[item]["auction"]["buyout"] < smallest:
-				smallest = cheapest[item]["auction"]["buyout"]
-				smallestKey = item
-		sorted.append(cheapest.pop(smallestKey))
+		smallest_key = ""
+		for item_identifier, item in cheapest.items():
+			if item["auction"]["buyout"] < smallest:
+				smallest = item["auction"]["buyout"]
+				smallest_key = item_identifier
+		sorted_items.append(cheapest.pop(smallest_key))
 
 	columns = {
 		"id": 2,
@@ -199,47 +202,56 @@ def printItemsPretty(items):
 		"realm": 5,
 	}
 
-	for column in columns:
-		for item in sorted:
+	for column in columns.keys():
+		for item in sorted_items:
 			match column:
 				case "id":
-					if len(str(item["item"].id)) > columns[column]: columns[column] = len(str(item["item"].id))
+					if len(str(item["item"].id)) > columns[column]:
+						columns[column] = len(str(item["item"].id))
 				case "name":
-					if len(item["item"].name) > columns[column]: columns[column] = len(item["item"].name)
+					if len(item["item"].name) > columns[column]:
+						columns[column] = len(item["item"].name)
 				case "diff":
-					if len(item["item"].diff) > columns[column]: columns[column] = len(item["item"].diff)
+					if len(item["item"].diff) > columns[column]:
+						columns[column] = len(item["item"].diff)
 				case "source":
-					if len(item["item"].source) > columns[column]: columns[column] = len(item["item"].source)
+					if len(item["item"].source) > columns[column]:
+						columns[column] = len(item["item"].source)
 				case "bid":
-					bid = len(str(round(item["auction"].get("bid", -10000000)/10000000))) + 1
-					if bid > columns[column]: columns[column] = bid
+					bid = len(str(round(item["auction"]
+						.get("bid", -10000000)/10000000))) + 1
+					if bid > columns[column]:
+						columns[column] = bid
 				case "buyout":
-					buyout = len(str(round(item["auction"]["buyout"]/10000000))) + 1
-					if buyout > columns[column]: columns[column] = buyout
+					buyout = len(str(round(
+						item["auction"]["buyout"]/10000000))) + 1
+					if buyout > columns[column]:
+						columns[column] = buyout
 				case "realm":
-					if len(connectedRealmIDs[item["realm"]]) > columns[column]: columns[column] = len(connectedRealmIDs[item["realm"]])
+					if len(connected_realm_ids[item["realm"]]) > columns[column]:
+						columns[column] = len(connected_realm_ids[item["realm"]])
 
-	def padValue(val, pad):
+	def pad_value(val, pad):
 		return str(val) + " "*(pad - len(str(val)))
 
-	line = f'| {padValue("ID", columns["id"])} | {padValue("Name", columns["name"])} | {padValue("Diff", columns["diff"])} | {padValue("Source", columns["source"])} | {padValue("Bid", columns["bid"])} | {padValue("Buyout", columns["buyout"])} | {padValue("Realm", columns["realm"])} |'
+	line = f'| {pad_value("ID", columns["id"])} | {pad_value("Name", columns["name"])} | {pad_value("Diff", columns["diff"])} | {pad_value("Source", columns["source"])} | {pad_value("Bid", columns["bid"])} | {pad_value("Buyout", columns["buyout"])} | {pad_value("Realm", columns["realm"])} |'
 	print(line)
 	print("-"*len(line))
-	for item in sorted:
-		id = padValue(item["item"].id, columns["id"])
-		name = padValue(item["item"].name, columns["name"])
-		diff = padValue(item["item"].diff, columns["diff"])
-		source = padValue(item["item"].source, columns["source"])
+	for item in sorted_items:
+		id = pad_value(item["item"].id, columns["id"])
+		name = pad_value(item["item"].name, columns["name"])
+		diff = pad_value(item["item"].diff, columns["diff"])
+		source = pad_value(item["item"].source, columns["source"])
 		_bid = str(round(item["auction"].get("bid", -10000000)/10000000)) + "k"
-		bid = padValue(_bid if _bid != "-1k" else "-", columns["bid"])
-		buyout = padValue(str(round(item["auction"]["buyout"]/10000000)) + "k", columns["buyout"])
-		realm = padValue(connectedRealmIDs[item["realm"]], columns["realm"])
-		line = f'| {id} | {name} | {diff} | {source} | {bid} | {buyout} | {realm} |' 
+		bid = pad_value(_bid if _bid != "-1k" else "-", columns["bid"])
+		buyout = pad_value(str(round(item["auction"]["buyout"]/10000000)) + "k", columns["buyout"])
+		realm = pad_value(connected_realm_ids[item["realm"]], columns["realm"])
+		line = f'| {id} | {name} | {diff} | {source} | {bid} | {buyout} | {realm} |'
 		print(line)
 
 def main(args):
-	relevantItems = parseAHs()
-	printItemsPretty(relevantItems)
+	relevant_items = parse_ahs()
+	print_items_pretty(relevant_items)
 
 if __name__ == '__main__':
 	t0 = time.time()
