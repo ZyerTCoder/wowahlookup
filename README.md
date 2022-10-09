@@ -17,3 +17,5 @@ Grabs AH data from chosen servers and lists the cheapest items it finds, example
 ```
 
 Requires your own set of blizzard authentication credentials which you can find on their [developer website](https://develop.battle.net/documentation/guides/getting-started), create a textfile named "credentials" in the same directory as the python script and paste the client and secret ids on the first and second lines respectively
+
+Relevant globals can be changed at the top of the python script
