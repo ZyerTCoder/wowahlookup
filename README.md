@@ -2,20 +2,27 @@
 
 Grabs AH data from chosen servers and lists the cheapest items it finds, example output:
 ```
-| ID     | Name                         | Diff              | Source  | Bid  | Buyout | Realm       |
------------------------------------------------------------------------------------------------------
-| 190631 | Vandalized Ephemera Mitts    | Fated Raid Finder | SotFO   | -    | 75k    | Tarren Mill |
-| 142541 | Drape of the Forgotten Souls | Mythic            | ToV     | -    | 80k    | Tarren Mill |
-| 190631 | Vandalized Ephemera Mitts    | Fated Heroic      | SotFO   | -    | 80k    | Tarren Mill |
-| 187019 | Infiltrator's Shoulderguards | Normal            | Korthia | 180k | 120k   | Defias      |
-| 184778 | Decadent Nathrian Shawl      | Fated Mythic      | CN      | 475k | 150k   | Tarren Mill |
-| 190631 | Vandalized Ephemera Mitts    | Mythic            | SotFO   | -    | 177k   | Tarren Mill |
-| 190334 | Origin                       | Mythic            | SotFO   | -    | 200k   | Tarren Mill |
-| 190334 | Origin                       | Fated Mythic      | SotFO   | -    | 218k   | Tarren Mill |
-| 187097 | Construct's Shoulderplates   | Normal            | Korthia | 315k | 350k   | Tarren Mill |
-| 190631 | Vandalized Ephemera Mitts    | Fated Mythic      | SotFO   | -    | 350k   | Aggra       |
+| ID     | Name                               | Diff              | Source        | Bid  | Buyout | Realm       | Ratio | MarketV |
+-----------------------------------------------------------------------------------------------------------------------------------
+| 118790 | Sabre of the Faceless Moon         | Normal            | WoD World     | 5k   | 6k     | Tarren Mill | 0.12  | 46k     |
+| 118791 | Razorcrystal Blade                 | Normal            | WoD World     | 19k  | 20k    | Tarren Mill | 0.19  | 100k    |
+| 118808 | Highmaul Magi Scarf                | Normal            | WoD World     | 19k  | 20k    | Tarren Mill | 0.11  | 170k    |
+| 2244   | Krol Blade                         | Normal            | Classic World | 23k  | 24k    | Tarren Mill | 0.3   | 77k     |
+| 116572 | Skettis Staff                      | Normal            | WoD World     | -    | 25k    | Defias      | 0.46  | 55k     |
+| 11168  | Formula: Shield Lesser Parry       | Normal            | Classic World | 24k  | 25k    | Tarren Mill | 0.26  | 93k     |
+| 190631 | Vandalized Ephemera Mitts          | Fated Raid Finder | SotFO         | -    | 25k    | Tarren Mill | 0.31  | 80k     |
+| 118809 | Eldodin's Elegant Drape            | Normal            | WoD World     | 28k  | 30k    | Tarren Mill | 0.17  | 169k    |
+| 118804 | Starrgo's Walking Stick            | Normal            | WoD World     | -    | 35k    | Tarren Mill | 0.22  | 160k    |
+.
+.
+.
 ```
 
-Requires your own set of blizzard authentication credentials which you can find on their [developer website](https://develop.battle.net/documentation/guides/getting-started), create a textfile named "credentials" in the same directory as the python script and paste the client and secret ids on the first and second lines respectively
+Requires your own set of blizzard and tsm authentication credentials which you can find on their [developer](https://develop.battle.net/documentation/guides/getting-started) [websites](https://www.tradeskillmaster.com/user), create a textfile named "credentials" in the same directory as the python script and paste the keys in the following order:
+```
+blizzard client id
+blizzard secret id
+tsm api key
+```
 
-Relevant globals can be changed at the top of the python script
+Relevant globals can be changed at the top of the python script including your region, realms of interest and extra file names
