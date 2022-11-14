@@ -3,12 +3,6 @@ CONNECTED_REALM_IDS = {
 	1303: "Aggra",
 	1096: "Defias"
 }
-TSM_AH_IDS = {
-	"Tarren Mill": 97,
-	"Defias": 101,
-	"Aggra": 112
-}
-
 REGION = "eu" # eu/us
 ITEM_LIST = "items.txt"
 BONUSES_LIST_JSON = "bonuses.json"
@@ -17,6 +11,13 @@ CREDENTIALS = "credentials"
 blizzard client id
 blizzard secret id
 tsm api key
+'''
+
+'''
+TODO
+add extra options on prompt after the initial print:
+	links to undermine journal pages
+	sorting in a different way (ratio)
 '''
 
 import sys
