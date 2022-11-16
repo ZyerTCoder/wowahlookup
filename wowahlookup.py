@@ -315,13 +315,30 @@ def main(args):
 	relevant_items = parse_ahs(items, tsm_data)
 	cheapest = get_cheapest(relevant_items)
 	populate_ratios(cheapest)
+
+	# sorting methods
 	buyout = lambda item: item["auction"]["buyout"]
-	def minbidout(item):
-		return min(item["auction"].get("bid", float("inf")), item["auction"]["buyout"])
+	minbidout = lambda item: min(item["auction"].get("bid", float("inf")), item["auction"]["buyout"])
 	ratio = lambda item: item["ratio"]
-	# [print(buyout(c)) for c in cheapest.items()]
-	sorted_items = sorted(cheapest.values(), key=ratio)
+	
+	sorted_items = sorted(cheapest.values(), key=minbidout)
 	print_items_pretty(sorted_items)
+	while True:
+		i = input("Enter key:").strip()
+		match i:
+			case "l":
+				pass
+			case "r":
+				print_items_pretty(sorted(cheapest.values(), key=ratio))
+			case "b":
+				print_items_pretty(sorted(cheapest.values(), key=buyout))
+			case "d":
+				print_items_pretty(sorted(cheapest.values(), key=minbidout))
+			case "c":
+				break
+			case _:
+				print("l - links to item pages\nr - sort by ratio\nb - sort by buyout\nm - sort by bid then buyout (default)\nc - exit")
+
 	
 
 if __name__ == '__main__':
