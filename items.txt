@@ -2,8 +2,6 @@
 # will fail to parse if these are not provided 
 
 # Raid BoEs
-187097, Korthia, Construct's Shoulderplates
-187024, Korthia, Necromancer's Mantle
 144400, NH, Feathermane Feather Cloak, Raid Finder
 144403, NH, Fashionable Autumn Cloak, Raid Finder
 152084, ABT, Gloves of Abhorrent Strategies
@@ -16,17 +14,16 @@
 168602, EP, Cloak of Blessed Depths, Mythic
 184778, CN, Decadent Nathrian Shawl, Mythic
 184778, CN, Decadent Nathrian Shawl, Fated Mythic
-190631, SotFO, Vandalized Ephemera Mitts, Raid Finder
 190631, SotFO, Vandalized Ephemera Mitts
 190631, SotFO, Vandalized Ephemera Mitts, Heroic
 190631, SotFO, Vandalized Ephemera Mitts, Mythic
-190631, SotFO, Vandalized Ephemera Mitts, Fated Raid Finder
 190631, SotFO, Vandalized Ephemera Mitts, Fated Normal
 190631, SotFO, Vandalized Ephemera Mitts, Fated Heroic
 190631, SotFO, Vandalized Ephemera Mitts, Fated Mythic
 190334, SotFO, Origin, Mythic
 190334, SotFO, Origin, Fated Mythic
 
+# Dungeon BoEs
 9424, Uldaman, Ginn-Su Sword
 9429, Uldaman, Miner's Hat of the Deep
 9431, Uldaman, Papal Fez
@@ -35,14 +32,19 @@
 # Mounts
 163573, BFA World, Goldenmane's Reins
 163574, BFA World, Chewed-On Mule
+163575, BFA World, Tamed Bloodfeaster
+163576, BFA World, Captured Dune Scavenger
 54068, TCG, Wooly White Rhino
 49286, TCG, X-51 Nether Rocket
+
 # Pets
 P2938, Bastion, Gilded Wader
 P183, TCG, Ethereal Soul-Trader
 # Toys
 
 # World Drops
+187097, Korthia, Construct's Shoulderplates
+187024, Korthia, Necromancer's Mantle
 159840, BFA World, Teebu's Scorching Straight Sword
 118809, WoD World, Eldodin's Elegant Drape
 118812, WoD World, Flamelicked Cloak of Kaufebyrd
@@ -53,7 +55,6 @@ P183, TCG, Ethereal Soul-Trader
 116572, WoD World, Skettis Staff
 118804, WoD World, Starrgo's Walking Stick
 118791, WoD World, Razorcrystal Blade
-118790, WoD World, Sabre of the Faceless Moon
 # 87514, MoP World, Sharpened Multi-Prong Dagger
 # 87510, MoP World, Buc-Zakai Bugslicer
 # 87478, MoP World, Wand of the Exiled Path
@@ -81,7 +82,7 @@ P183, TCG, Ethereal Soul-Trader
 # 14369, Classic World, Mystic's Wrap
 # 14372, Classic World, Sanguine Armor
 # 14380, Classic World, Sanguine Robe
-# 14379, Classic World, Sanguine Trousers
+
 # 869, Classic World, Dazzling Longsword
 2244, Classic World, Krol Blade
 # 13034, Classic World, Speedsteel Rapier
@@ -122,3 +123,7 @@ P183, TCG, Ethereal Soul-Trader
 # 118794, WoD World, Felcore Iron Wand
 # 4354, Classic World, Pattern: Rich Purple Silk Shirt
 # 116712, WoD World, Sunsworn Transcription
+# 14379, Classic World, Sanguine Trousers
+# 118790, WoD World, Sabre of the Faceless Moon
+# 190631, SotFO, Vandalized Ephemera Mitts, Raid Finder
+# 190631, SotFO, Vandalized Ephemera Mitts, Fated Raid Finder

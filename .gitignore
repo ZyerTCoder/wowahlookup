@@ -1,5 +1,3 @@
 credentials
-wowahlookupv0log.txt
-wowahlookupv1log.txt
+wowahlookupv*log.txt
 tsm_data.json
-items.txt
