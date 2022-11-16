@@ -133,16 +133,31 @@ def parse_ahs(item_list, market_values):
 							if (_t := bonuses[str(bonus_id)].get("tag", False)):
 								no_diff_id = False
 								if _t == item.diff:
-									out[id].append({"item": item, "auction": auction, "realm": ah, "market_value": market_values[id]})
+									out[id].append({
+										"item": item,
+										"auction": auction,
+										"realm": ah,
+										"market_value": market_values[id],
+									})
 					if no_diff_id:
 						for item in item_list[id]:
 							if item.diff == "Normal":
-								out[id].append({"item": item, "auction": auction, "realm": ah, "market_value": market_values[id]})
+								out[id].append({
+									"item": item,
+									"auction": auction,
+									"realm": ah,
+									"market_value": market_values[id],
+								})
 				else:
 					out[id].append({"item": item_list[id][0], "auction": auction, "realm": ah, "market_value": market_values[id]})
 			elif id == "82800": # Pet Cages
 				if (pet_id := f"P{auction['item']['pet_species_id']}") in item_list:
-					out[pet_id].append({"item": item_list[pet_id][0], "auction": auction, "realm": ah, "market_value": market_values[pet_id]})
+					out[pet_id].append({
+						"item": item_list[pet_id][0],
+						"auction": auction,
+						"realm": ah,
+						"market_value": market_values[pet_id],
+					})
 		logging.debug(f"Parsed {ah_name} items")
 	return out
 
@@ -174,8 +189,7 @@ def parse_tsm_data():
 		json.dump(tsm_data, f, indent="\t")
 	return tsm_data
 
-def print_items_pretty(items):
-	logging.debug("Pretty printing items")
+def get_cheapest(items):
 	cheapest = {}
 	for id_group in items.values():
 		for item in id_group:
@@ -190,16 +204,25 @@ def print_items_pretty(items):
 					cheapest[identifier]["auction"]["bid"] = item["auction"].get("bid")
 					if cheapest[identifier]["realm"] != item["realm"]:
 						cheapest[identifier]["bid_on_diff_realm"] = item["realm"]
+	return cheapest
+
+def populate_ratios(items):
+	for item in items.values():
+		ratio_against = min(item["auction"].get("bid", float("inf")), item["auction"]["buyout"])
+		item["ratio"] = ratio_against/item["market_value"]
+
+def print_items_pretty(sorted_items):
+	logging.debug("Pretty printing items")
 	
-	sorted_items = []
-	while len(cheapest):
-		smallest = float("inf")
-		smallest_key = ""
-		for item_identifier, item in cheapest.items():
-			if item["auction"]["buyout"] < smallest:
-				smallest = item["auction"]["buyout"]
-				smallest_key = item_identifier
-		sorted_items.append(cheapest.pop(smallest_key))
+	# sorted_items = []
+	# while len(items):
+	# 	smallest = float("inf")
+	# 	smallest_key = ""
+	# 	for item_identifier, item in items.items():
+	# 		if item["auction"]["buyout"] < smallest:
+	# 			smallest = item["auction"]["buyout"]
+	# 			smallest_key = item_identifier
+	# 	sorted_items.append(items.pop(smallest_key))
 
 	columns = {
 		"id": 2,
@@ -244,9 +267,9 @@ def print_items_pretty(items):
 						item["auction"]["buyout"]/10000000))) + 1
 					if buyout > columns[column]:
 						columns[column] = buyout
-				case "realm":
-					if len(CONNECTED_REALM_IDS[item["realm"]]) > columns[column]:
-						columns[column] = len(CONNECTED_REALM_IDS[item["realm"]])
+				# case "realm":
+				# 	if len(CONNECTED_REALM_IDS[item["realm"]]) > columns[column]:
+				# 		columns[column] = len(CONNECTED_REALM_IDS[item["realm"]])
 				case "marketV":
 					mv = len(str(round(
 						item["market_value"]/10000000))) + 1
@@ -258,6 +281,7 @@ def print_items_pretty(items):
 
 	line = f'| {pad_value("ID", columns["id"])} | {pad_value("Name", columns["name"])} | {pad_value("Diff", columns["diff"])} | {pad_value("Source", columns["source"])} | {pad_value("Bid", columns["bid"])} | {pad_value("Buyout", columns["buyout"])} | {pad_value("Realm", columns["realm"])} | {pad_value("Ratio", columns["ratio"])} | {pad_value("MarketV", columns["marketV"])} |'
 	print(line)
+	longest_line = len(line)
 	print("-"*len(line))
 	for item in sorted_items:
 		id = pad_value(item["item"].id, columns["id"])
@@ -268,14 +292,13 @@ def print_items_pretty(items):
 		if item.get("bid_on_diff_realm", False): _bid += "*"
 		bid = pad_value(_bid if _bid != "-1k" else "-", columns["bid"])
 		buyout = pad_value(str(round(item["auction"]["buyout"]/10000000)) + "k", columns["buyout"])
-		realm = pad_value(CONNECTED_REALM_IDS[item["realm"]], columns["realm"])
-		ratio_against = min(item["auction"].get("bid", float("inf")), item["auction"]["buyout"])
-		_ratio = round(ratio_against/item["market_value"], 2)
-		ratio = pad_value(str(_ratio) if _ratio < 1 else ">1", columns["ratio"])
+		realm = CONNECTED_REALM_IDS[item["realm"]][:columns["ratio"]]
+		ratio = pad_value(str(round(item["ratio"], 2)) if item["ratio"] < 1 else ">1", columns["ratio"])
 		marketV = pad_value(str(round(item["market_value"]/10000000)) + "k", columns["marketV"])
 		line = f'| {id} | {name} | {diff} | {source} | {bid} | {buyout} | {realm} | {ratio} | {marketV} |'
 		if r := item.get("bid_on_diff_realm", False): line += f" *{CONNECTED_REALM_IDS[r]}"
 		print(line)
+		if len(line) > longest_line: longest_line = len(line)
 
 def main(args):
 	try:
@@ -290,7 +313,15 @@ def main(args):
 
 	items = parse_items()
 	relevant_items = parse_ahs(items, tsm_data)
-	print_items_pretty(relevant_items)
+	cheapest = get_cheapest(relevant_items)
+	populate_ratios(cheapest)
+	buyout = lambda item: item["auction"]["buyout"]
+	def minbidout(item):
+		return min(item["auction"].get("bid", float("inf")), item["auction"]["buyout"])
+	ratio = lambda item: item["ratio"]
+	# [print(buyout(c)) for c in cheapest.items()]
+	sorted_items = sorted(cheapest.values(), key=ratio)
+	print_items_pretty(sorted_items)
 	
 
 if __name__ == '__main__':
