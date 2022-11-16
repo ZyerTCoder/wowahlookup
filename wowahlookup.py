@@ -324,7 +324,10 @@ def main(args):
 	sorted_items = sorted(cheapest.values(), key=minbidout)
 	print_items_pretty(sorted_items)
 	while True:
-		i = input("Enter key:").strip()
+		try:
+			i = input("Enter key:").strip().lower()
+		except KeyboardInterrupt:
+			return
 		match i:
 			case "l":
 				pass
@@ -338,7 +341,6 @@ def main(args):
 				break
 			case _:
 				print("l - links to item pages\nr - sort by ratio\nb - sort by buyout\nm - sort by bid then buyout (default)\nc - exit")
-
 	
 
 if __name__ == '__main__':
