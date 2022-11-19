@@ -3,6 +3,8 @@ CONNECTED_REALM_IDS = {
 	1303: "Aggra",
 	1096: "Defias"
 }
+
+RATIO_NOTIF_THRESHOLD = .1
 REGION = "eu" # eu/us
 ITEM_LIST = "items.txt"
 BONUSES_LIST_JSON = "bonuses.json"
@@ -17,7 +19,7 @@ tsm api key
 TODO
 add extra options on prompt after the initial print:
 	links to undermine journal pages
-	sorting in a different way (ratio)
+	modular columns in the table for better links (just id/name/link)
 '''
 
 import sys
@@ -27,6 +29,7 @@ import logging
 from time import perf_counter, time
 import requests
 import json
+from win10toast import ToastNotifier
 
 APP_NAME = "wowahlookup"
 VERSION = 1.1
@@ -213,16 +216,6 @@ def populate_ratios(items):
 
 def print_items_pretty(sorted_items):
 	logging.debug("Pretty printing items")
-	
-	# sorted_items = []
-	# while len(items):
-	# 	smallest = float("inf")
-	# 	smallest_key = ""
-	# 	for item_identifier, item in items.items():
-	# 		if item["auction"]["buyout"] < smallest:
-	# 			smallest = item["auction"]["buyout"]
-	# 			smallest_key = item_identifier
-	# 	sorted_items.append(items.pop(smallest_key))
 
 	columns = {
 		"id": 2,
@@ -300,6 +293,18 @@ def print_items_pretty(sorted_items):
 		print(line)
 		if len(line) > longest_line: longest_line = len(line)
 
+def sendWindowsToast(msg):
+	toaster = ToastNotifier()
+	toaster.show_toast("WoWAHLookUp", msg, duration=10)
+
+def check_low_ratio(item):
+	if item["ratio"] < RATIO_NOTIF_THRESHOLD:
+		_min = min(item["auction"].get("bid", float("inf")), item["auction"]["buyout"])
+		price = str(round(_min/10000000)) + "k"
+		msg = f'Found {item["item"].name} for {price} ({round(item["ratio"], 3)*100}%)'
+		# sendWindowsToast(msg)
+		print(msg)
+
 def main(args):
 	try:
 		with open(LOCAL_TSM_FILE) as f:
@@ -317,12 +322,17 @@ def main(args):
 	populate_ratios(cheapest)
 
 	# sorting methods
-	buyout = lambda item: item["auction"]["buyout"]
-	minbidout = lambda item: min(item["auction"].get("bid", float("inf")), item["auction"]["buyout"])
-	ratio = lambda item: item["ratio"]
-	
-	sorted_items = sorted(cheapest.values(), key=minbidout)
+	bybuyout = lambda item: item["auction"]["buyout"]
+	byminbidout = lambda item: min(item["auction"].get("bid", float("inf")), item["auction"]["buyout"])
+	byratio = lambda item: item["ratio"]
+	byname = lambda item: item["item"].name
+	byid = lambda item: item["item"].id
+
+	sorted_items = sorted(cheapest.values(), key=byratio)
 	print_items_pretty(sorted_items)
+
+	check_low_ratio(sorted_items[0])
+
 	while True:
 		try:
 			i = input("Enter key:").strip().lower()
@@ -332,15 +342,19 @@ def main(args):
 			case "l":
 				pass
 			case "r":
-				print_items_pretty(sorted(cheapest.values(), key=ratio))
+				print_items_pretty(sorted(cheapest.values(), key=byratio))
 			case "b":
-				print_items_pretty(sorted(cheapest.values(), key=buyout))
+				print_items_pretty(sorted(cheapest.values(), key=bybuyout))
 			case "d":
-				print_items_pretty(sorted(cheapest.values(), key=minbidout))
+				print_items_pretty(sorted(cheapest.values(), key=byminbidout))
+			case "n":
+				print_items_pretty(sorted(cheapest.values(), key=byname))
+			case "i":
+				print_items_pretty(sorted(cheapest.values(), key=byid))
 			case "c":
 				break
 			case _:
-				print("l - links to item pages\nr - sort by ratio\nb - sort by buyout\nm - sort by bid then buyout (default)\nc - exit")
+				print("l - links to item pages\nr - sort by ratio (default)\nb - sort by buyout\nm - sort by bid then buyout\nc - exit")
 	
 
 if __name__ == '__main__':
