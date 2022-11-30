@@ -23,7 +23,6 @@ add extra options on prompt after the initial print:
 '''
 
 import sys
-import os
 import argparse
 import logging
 from time import perf_counter, time
@@ -32,10 +31,16 @@ import json
 from win10toast import ToastNotifier
 
 APP_NAME = "wowahlookup"
-VERSION = 1.1
+DESCRIPTION = "Looks up prices of specific items from chosen AHs"
+VERSION = 1.2
 WORKING_DIR = r"C:"
 LOG_FILE = f'{APP_NAME}v{VERSION}log.txt'
-DESCRIPTION = "Looks up prices of specific items from chosen AHs"
+FILE_DIR = __file__.rsplit("\\", 1)[0] + "\\"
+
+'''
+v1.2:
+added auto mode and emailer for notifications
+'''
 
 BLIZZARD_AUTH = "https://oauth.battle.net/token"
 BLIZZARD_HOST = "https://eu.api.blizzard.com/"
@@ -53,7 +58,7 @@ class Item:
 
 def get_blizzard_header():
 	logging.debug(f"Reading {CREDENTIALS}")
-	with open(CREDENTIALS, "r") as c:
+	with open(FILE_DIR + CREDENTIALS, "r") as c:
 		lines = [l.strip() for l in c.readlines()]
 		client_id = lines[0]
 		client_secret = lines[1]
@@ -67,7 +72,7 @@ def get_blizzard_header():
 
 def get_tsm_header():
 	logging.debug(f"Reading {CREDENTIALS}")
-	with open(CREDENTIALS, "r") as c:
+	with open(FILE_DIR + CREDENTIALS, "r") as c:
 		lines = [l.strip() for l in c.readlines()]
 		stuff = {
 			"client_id": "c260f00d-1071-409a-992f-dda2e5498536",
@@ -84,12 +89,12 @@ def get_tsm_header():
 
 def get_bonuses():
 	logging.debug(f"Reading {BONUSES_LIST_JSON}")
-	with open(BONUSES_LIST_JSON, "r") as f:
+	with open(FILE_DIR + BONUSES_LIST_JSON, "r") as f:
 		return json.loads(f.read())
 
 def parse_items():
 	logging.debug(f"Reading {ITEM_LIST}")
-	with open(ITEM_LIST, "r") as input:
+	with open(FILE_DIR + ITEM_LIST, "r") as input:
 		items = [[i.strip() for i in l.strip().split(",")] for l in input.readlines() if l[0] != "#" and l[0] != "\n"]
 	out = {}
 	for item in items:
@@ -187,7 +192,7 @@ def parse_tsm_data():
 			tsm_data["P" + str(entry["petSpeciesId"])] = entry["marketValue"]
 	logging.info(f"Parsed TSM data for {REGION.upper()}, {len(tsm_data)-1} entries")
 
-	with open(LOCAL_TSM_FILE, "w") as f:
+	with open(FILE_DIR + LOCAL_TSM_FILE, "w") as f:
 		logging.debug(f"Writing TSM data to {LOCAL_TSM_FILE}")
 		json.dump(tsm_data, f, indent="\t")
 	return tsm_data
@@ -272,7 +277,18 @@ def print_items_pretty(sorted_items):
 	def pad_value(val, pad):
 		return str(val) + " "*(pad - len(str(val)))
 
-	line = f'| {pad_value("ID", columns["id"])} | {pad_value("Name", columns["name"])} | {pad_value("Diff", columns["diff"])} | {pad_value("Source", columns["source"])} | {pad_value("Bid", columns["bid"])} | {pad_value("Buyout", columns["buyout"])} | {pad_value("Realm", columns["realm"])} | {pad_value("Ratio", columns["ratio"])} | {pad_value("MarketV", columns["marketV"])} |'
+	line = (
+		f'| {pad_value("ID", columns["id"])}'
+		f' | {pad_value("Name", columns["name"])}'
+		f' | {pad_value("Diff", columns["diff"])}'
+		f' | {pad_value("Source", columns["source"])}'
+		f' | {pad_value("Bid", columns["bid"])}'
+		f' | {pad_value("Buyout", columns["buyout"])}'
+		f' | {pad_value("Realm", columns["realm"])}'
+		f' | {pad_value("Ratio", columns["ratio"])}'
+		f' | {pad_value("MarketV", columns["marketV"])}'
+		f' |' 
+		)
 	print(line)
 	longest_line = len(line)
 	print("-"*len(line))
@@ -302,12 +318,16 @@ def check_low_ratio(item):
 		_min = min(item["auction"].get("bid", float("inf")), item["auction"]["buyout"])
 		price = str(round(_min/10000000)) + "k"
 		msg = f'Found {item["item"].name} for {price} ({round(item["ratio"], 3)*100}%)'
-		# sendWindowsToast(msg)
 		print(msg)
+
+		sys.path.append(FILE_DIR + "..\\emailer")
+		import emailer
+		emailer.email_notif("WoWAHLookUp: Found item", msg)
+		sendWindowsToast(msg)
 
 def main(args):
 	try:
-		with open(LOCAL_TSM_FILE) as f:
+		with open(FILE_DIR + LOCAL_TSM_FILE) as f:
 			tsm_data = json.load(f)
 			if tsm_data["date"] + 86400 < time():
 				logging.info("Local TSM data is too old, renewing")
@@ -329,50 +349,59 @@ def main(args):
 	byid = lambda item: item["item"].id
 
 	sorted_items = sorted(cheapest.values(), key=byratio)
-	print_items_pretty(sorted_items)
 
-	check_low_ratio(sorted_items[0])
-
-	while True:
-		try:
-			i = input("Enter key:").strip().lower()
-		except KeyboardInterrupt:
-			return
-		match i:
-			case "l":
-				pass
-			case "r":
-				print_items_pretty(sorted(cheapest.values(), key=byratio))
-			case "b":
-				print_items_pretty(sorted(cheapest.values(), key=bybuyout))
-			case "d":
-				print_items_pretty(sorted(cheapest.values(), key=byminbidout))
-			case "n":
-				print_items_pretty(sorted(cheapest.values(), key=byname))
-			case "i":
-				print_items_pretty(sorted(cheapest.values(), key=byid))
-			case "c":
-				break
-			case _:
-				print("l - links to item pages\nr - sort by ratio (default)\nb - sort by buyout\nm - sort by bid then buyout\nc - exit")
-	
+	if not args.auto:
+		print_items_pretty(sorted_items)
+		while True:
+			try:
+				i = input("Enter key:").strip().lower()
+			except KeyboardInterrupt:
+				return
+			match i:
+				case "l":
+					pass
+				case "r":
+					print_items_pretty(sorted(cheapest.values(), key=byratio))
+				case "b":
+					print_items_pretty(sorted(cheapest.values(), key=bybuyout))
+				case "m":
+					print_items_pretty(sorted(cheapest.values(), key=byminbidout))
+				case "n":
+					print_items_pretty(sorted(cheapest.values(), key=byname))
+				case "i":
+					print_items_pretty(sorted(cheapest.values(), key=byid))
+				case "c":
+					break
+				case _:
+					print(
+						"l - links to item pages",
+						"r - sort by ratio (default)",
+						"b - sort by buyout",
+						"m - sort by bid then buyout",
+						"n - name",
+						"i - id",
+						"c - exit",
+						sep="\n"
+					)
+	else:
+		check_low_ratio(sorted_items[0])
 
 if __name__ == '__main__':
 	t0 = perf_counter()
-	# os.chdir(WORKING_DIR)
 
 	# parse input
 	parser = argparse.ArgumentParser(description=DESCRIPTION)
 	parser.add_argument("-log", type=str, default="INFO", help="set log level for console output, WARNING/INFO/DEBUG")
 	parser.add_argument("-logfile", type=str, default="0", help="sets file logging level, 0/CRITICAL/ERROR/WARNING/INFO/DEBUG, set to 0 to disable")
-	
+	parser.add_argument("-auto", action="store_true", default=False, help="turns off printing and prompting for input")
+
 	args = parser.parse_args()
 
 	# setting up logger to info on terminal and debug on file
 	log_format=logging.Formatter(f'%(asctime)s {APP_NAME} v{VERSION} %(levelname)s:%(name)s:%(funcName)s %(message)s')
 	
 	if args.logfile != "0":
-		file_handler = logging.FileHandler(filename=LOG_FILE, mode="a")
+		file_handler = logging.FileHandler(filename=FILE_DIR+LOG_FILE, mode="a")
 		file_handler.setLevel(getattr(logging, args.logfile.upper()))
 		file_handler.setFormatter(log_format)
 		logging.getLogger().addHandler(file_handler)
@@ -391,4 +420,4 @@ if __name__ == '__main__':
 
 	main(args)
 
-	logging.info(f"Exited. Ran for {round(perf_counter() - t0, 3)}s")
+	logging.info(f"Exited. Ran for {round(perf_counter() - t0, 3)}s\n")
