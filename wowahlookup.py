@@ -23,6 +23,7 @@ add extra options on prompt after the initial print:
 '''
 
 import sys
+import traceback
 import argparse
 import logging
 from time import perf_counter, time
@@ -32,7 +33,7 @@ from win10toast import ToastNotifier
 
 APP_NAME = "wowahlookup"
 DESCRIPTION = "Looks up prices of specific items from chosen AHs"
-VERSION = 1.2
+VERSION = 1.3
 WORKING_DIR = r"C:"
 LOG_FILE = f'{APP_NAME}v{VERSION}log.txt'
 FILE_DIR = __file__.rsplit("\\", 1)[0] + "\\"
@@ -40,6 +41,9 @@ FILE_DIR = __file__.rsplit("\\", 1)[0] + "\\"
 '''
 v1.2:
 added auto mode and emailer for notifications
+v1.3
+added connection error catching on most requests
+full traceback written on uncaught exception
 '''
 
 BLIZZARD_AUTH = "https://oauth.battle.net/token"
@@ -108,8 +112,13 @@ def parse_items():
 	return out
 
 def parse_ahs(item_list, market_values):
+	try:
+		bearer = get_blizzard_header()
+	except requests.exceptions.ConnectionError as e:
+		logging.error("Connection error when attempting to get blizzard auths, check your internet connection")
+		return e
+	
 	bonuses = get_bonuses()
-	bearer = get_blizzard_header()
 	params = {
 		"namespace": f"dynamic-{REGION}",
 		"locale": "en_US",
@@ -120,13 +129,18 @@ def parse_ahs(item_list, market_values):
 		out[key] = []
 
 	for ah, ah_name in CONNECTED_REALM_IDS.items():
-		x = requests.get(
-			f"{BLIZZARD_HOST}data/wow/connected-realm/{ah}/auctions", 
-			headers=bearer, params=params)
+		try:
+			x = requests.get(
+				f"{BLIZZARD_HOST}data/wow/connected-realm/{ah}/auctions", 
+				headers=bearer, params=params)
+		except ConnectionError as e:
+			logging.error("Connection error when attempting to download AH data, check your internet connection")
+			return e
 		if x.status_code != 200:
-			logging.error("Failted to get AH data")
+			logging.error("Failed to get AH data")
 			logging.error(x, x.reason)
 			return
+
 		auctions = json.loads(x.text)["auctions"]
 		logging.info(f"There are {len(auctions)} items for auction in {ah_name}")
 		for auction in auctions:
@@ -170,14 +184,17 @@ def parse_ahs(item_list, market_values):
 	return out
 
 def parse_tsm_data():
-	logging.info("Downloading TSM AH data")
-	bearer = get_tsm_header()
-	tsm_data = {"date": time()}
-
 	match REGION:
 		case "na": r = 1
 		case "eu": r = 2
-	tsm_resp = requests.get(f"{TSM_PRICE}region/{r}", headers=bearer)
+	
+	try:
+		logging.info("Downloading TSM AH data")
+		bearer = get_tsm_header()
+		tsm_resp = requests.get(f"{TSM_PRICE}region/{r}", headers=bearer)
+	except requests.exceptions.ConnectionError as e:
+		logging.error("Connection error when attempting to get tsm data, check your internet connection")
+		return e
 	if tsm_resp.status_code != 200:
 		logging.error("Failted to get TSM data")
 		logging.error(tsm_resp, tsm_resp.reason)
@@ -185,6 +202,7 @@ def parse_tsm_data():
 	items = json.loads(tsm_resp.text)
 
 	logging.debug(f"Parsing TSM data for {REGION.upper()}")
+	tsm_data = {"date": time()}
 	for entry in items:
 		if entry["itemId"]:
 			tsm_data[str(entry["itemId"])] = entry["marketValue"]
@@ -338,6 +356,9 @@ def main(args):
 
 	items = parse_items()
 	relevant_items = parse_ahs(items, tsm_data)
+	if type(relevant_items) != dict:
+		logging.error(f"Error when parsing AH data: {relevant_items}")
+		return -1
 	cheapest = get_cheapest(relevant_items)
 	populate_ratios(cheapest)
 
@@ -384,7 +405,7 @@ def main(args):
 						sep="\n"
 					)
 	else:
-		check_low_ratio(sorted_items[0])
+		check_low_ratio(sorted_items)
 
 if __name__ == '__main__':
 	t0 = perf_counter()
@@ -397,22 +418,30 @@ if __name__ == '__main__':
 
 	args = parser.parse_args()
 
-	# setting up logger to info on terminal and debug on file
+	
 	log_format=logging.Formatter(f'%(asctime)s {APP_NAME} v{VERSION} %(levelname)s:%(name)s:%(funcName)s %(message)s')
-	
-	if args.logfile != "0":
-		file_handler = logging.FileHandler(filename=FILE_DIR+LOG_FILE, mode="a")
-		file_handler.setLevel(getattr(logging, args.logfile.upper()))
-		file_handler.setFormatter(log_format)
-		logging.getLogger().addHandler(file_handler)
-	
+	# setting up logger to info on terminal and debug on file
 	stream_handler = logging.StreamHandler(sys.stdout)
 	stream_handler.setLevel(getattr(logging, args.log.upper()))
 	# stream_handler.setFormatter(log_format)
 	logging.getLogger().addHandler(stream_handler)
 
 	if args.logfile != "0":
+		file_handler = logging.FileHandler(filename=FILE_DIR+LOG_FILE, mode="a")
+		file_handler.setLevel(getattr(logging, args.logfile.upper()))
+		file_handler.setFormatter(log_format)
+		logging.getLogger().addHandler(file_handler)
 		logging.getLogger().setLevel(getattr(logging, args.logfile.upper()))
+
+		def uncaught_exception_hook(exc_type, exc_value, exc_traceback):
+			traceback_file_path = FILE_DIR+f"TRACEBACK{time()}"+LOG_FILE
+			logging.error(f"Uncaught exception, type: {exc_type.__name__}, full traceback written to {traceback_file_path}\n")
+			with open(traceback_file_path, mode="a") as traceback_file:
+				traceback_file.write(f"Uncaught exception, type: {exc_type.__name__}")
+				traceback.print_exception(exc_value, file=traceback_file)
+				traceback.print_tb(exc_traceback, file=traceback_file)
+				
+		sys.excepthook = uncaught_exception_hook
 	else:
 		logging.getLogger().setLevel(getattr(logging, args.log.upper()))
 
