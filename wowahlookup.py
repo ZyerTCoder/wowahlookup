@@ -33,7 +33,7 @@ from win10toast import ToastNotifier
 
 APP_NAME = "wowahlookup"
 DESCRIPTION = "Looks up prices of specific items from chosen AHs"
-VERSION = 1.3
+VERSION = 1.4
 WORKING_DIR = r"C:"
 LOG_FILE = f'{APP_NAME}v{VERSION}log.txt'
 FILE_DIR = __file__.rsplit("\\", 1)[0] + "\\"
@@ -44,6 +44,8 @@ added auto mode and emailer for notifications
 v1.3
 added connection error catching on most requests
 full traceback written on uncaught exception
+v1.4
+now writes the last email to disk and doesnt email if it is repeated
 '''
 
 BLIZZARD_AUTH = "https://oauth.battle.net/token"
@@ -331,17 +333,37 @@ def sendWindowsToast(msg):
 	toaster = ToastNotifier()
 	toaster.show_toast("WoWAHLookUp", msg, duration=10)
 
-def check_low_ratio(item):
-	if item["ratio"] < RATIO_NOTIF_THRESHOLD:
-		_min = min(item["auction"].get("bid", float("inf")), item["auction"]["buyout"])
-		price = str(round(_min/10000000)) + "k"
-		msg = f'Found {item["item"].name} for {price} ({round(item["ratio"], 3)*100}%)'
-		print(msg)
+def check_low_ratio(items):
+	msg = ""
+	for item in items:
+		if item["ratio"] > RATIO_NOTIF_THRESHOLD:
+			# print(msg)
+			try:
+				with open(FILE_DIR + "lastemail.txt", "r") as f:
+					if f.read() == msg:
+						logging.info("Message is the same as the last iteration, not sending.")
+						return
+			except FileNotFoundError:
+				pass
 
-		sys.path.append(FILE_DIR + "..\\emailer")
-		import emailer
-		emailer.email_notif("WoWAHLookUp: Found item", msg)
-		sendWindowsToast(msg)
+			with open(FILE_DIR + "lastemail.txt", "w") as f:
+				logging.info("Wrote message to disk, sending email.")
+				f.write(msg)
+				sys.path.append(FILE_DIR + "..\\emailer")
+				import emailer
+				emailer.email_notif("WoWAHLookUp: Found item", msg)
+				# sendWindowsToast(msg)
+			return
+
+		if realm := item.get("bid_on_diff_realm", False):
+			_price = item["auction"].get("bid", float("inf"))
+		else:
+			_price = item["auction"]["buyout"]
+			realm = item["realm"]
+		
+		price = str(round(_price/10000000)) + "k"
+		msg += f'Found {item["item"].name} ({item["item"].source}) in {CONNECTED_REALM_IDS[realm]} for {price} ({round(item["ratio"]*100)}%)\n'
+		
 
 def main(args):
 	try:
