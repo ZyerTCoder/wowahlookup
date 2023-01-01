@@ -33,7 +33,7 @@ from win10toast import ToastNotifier
 
 APP_NAME = "wowahlookup"
 DESCRIPTION = "Looks up prices of specific items from chosen AHs"
-VERSION = 1.4
+VERSION = "1.4.1"
 WORKING_DIR = r"C:"
 LOG_FILE = f'{APP_NAME}v{VERSION}log.txt'
 FILE_DIR = __file__.rsplit("\\", 1)[0] + "\\"
@@ -91,6 +91,9 @@ def get_tsm_header():
 		data=stuff)
 	logging.debug("TSM bearer token obtained")
 	r = json.loads(x.text)
+	if not r.get("access_token", False):
+		raise KeyError("Error getting access token from TSM")
+
 	return {"Authorization": "Bearer " + r["access_token"]}
 
 def get_bonuses():
@@ -333,11 +336,11 @@ def sendWindowsToast(msg):
 	toaster = ToastNotifier()
 	toaster.show_toast("WoWAHLookUp", msg, duration=10)
 
-def check_low_ratio(items):
+def check_low_ratio(sorted_items):
 	msg = ""
-	for item in items:
+	for item in sorted_items:
 		if item["ratio"] > RATIO_NOTIF_THRESHOLD:
-			# print(msg)
+			print(msg)
 			try:
 				with open(FILE_DIR + "lastemail.txt", "r") as f:
 					if f.read() == msg:
@@ -347,12 +350,14 @@ def check_low_ratio(items):
 				pass
 
 			with open(FILE_DIR + "lastemail.txt", "w") as f:
-				logging.info("Wrote message to disk, sending email.")
+				logging.info("Wrote message to disk")
 				f.write(msg)
-				sys.path.append(FILE_DIR + "..\\emailer")
-				import emailer
-				emailer.email_notif("WoWAHLookUp: Found item", msg)
-				# sendWindowsToast(msg)
+				if msg != "":
+					logging.info("Emailing...")
+					sys.path.append(FILE_DIR + "..\\emailer")
+					import emailer
+					emailer.email_notif("WoWAHLookUp: Found item", msg)
+					# sendWindowsToast(msg)
 			return
 
 		if realm := item.get("bid_on_diff_realm", False):
