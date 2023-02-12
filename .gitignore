@@ -1,7 +1,7 @@
-credentials
-wowahlookupv*log.txt
-tsm_data.json
+required/tsm_credentials.txt
+required/blizzard_credentials.txt
+log
+data
 items.txt
 run.bat
-TRACEBACK*.txt
-lastemail.txt
+__pycache__

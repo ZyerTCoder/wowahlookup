@@ -4,21 +4,16 @@
 # Raid BoEs
 144400, NH, Feathermane Feather Cloak, Raid Finder
 144403, NH, Fashionable Autumn Cloak, Raid Finder
-152084, ABT, Gloves of Abhorrent Strategies
 152084, ABT, Gloves of Abhorrent Strategies, Heroic
 153018, ABT, Corrupted Mantle of the Felseekers
-153018, ABT, Corrupted Mantle of the Felseekers, Heroic
 165925, BoD, Drape of Valiant Defense, Raid Finder
 168602, EP, Cloak of Blessed Depths, Raid Finder
-168602, EP, Cloak of Blessed Depths, Heroic
 168602, EP, Cloak of Blessed Depths, Mythic
 184778, CN, Decadent Nathrian Shawl, Mythic
 184778, CN, Decadent Nathrian Shawl, Fated Mythic
 190631, SotFO, Vandalized Ephemera Mitts
-190631, SotFO, Vandalized Ephemera Mitts, Heroic
-190631, SotFO, Vandalized Ephemera Mitts, Mythic
 190631, SotFO, Vandalized Ephemera Mitts, Fated Normal
-190631, SotFO, Vandalized Ephemera Mitts, Fated Heroic
+190631, SotFO, Vandalized Ephemera Mitts, Mythic
 190631, SotFO, Vandalized Ephemera Mitts, Fated Mythic
 190334, SotFO, Origin, Mythic
 190334, SotFO, Origin, Fated Mythic
@@ -40,62 +35,43 @@
 # Pets
 P2938, Bastion, Gilded Wader
 P183, TCG, Ethereal Soul-Trader
+P2894, Revendreth, Burdened Soul
 # Toys
 
 # World Drops
 187097, Korthia, Construct's Shoulderplates
 187024, Korthia, Necromancer's Mantle
 159840, BFA World, Teebu's Scorching Straight Sword
-118809, WoD World, Eldodin's Elegant Drape
-118812, WoD World, Flamelicked Cloak of Kaufebyrd
 118808, WoD World, Highmaul Magi Scarf
-118813, WoD World, Tarred Greatcloak
 118850, WoD World, Transcription of Hir Oto'ro
-118805, WoD World, Caniki's Cane of Command
-116572, WoD World, Skettis Staff
-118804, WoD World, Starrgo's Walking Stick
-118791, WoD World, Razorcrystal Blade
-# 87514, MoP World, Sharpened Multi-Prong Dagger
-# 87510, MoP World, Buc-Zakai Bugslicer
-# 87478, MoP World, Wand of the Exiled Path
-# 36405, Wrath World, Double Cape
-# 36461, Wrath World, Demon-Skull Orb
-# 36465, Wrath World, Evergreen Branch
-# 44310, Wrath World, Namlak's Supernumerary Sticker
-# 43613, Wrath World, The Dusk Blade
-# 36698, Wrath World, Conifer Cone Staff
-# 36705, Wrath World, Geyser Staff
-# 36544, Wrath World, Journeyed Staff
-# 37806, Wrath World, Zabra's Misplaced Staff
-# 36517, Wrath World, Iron-Grip Shortsword
-# 43611, Wrath World, Krol Cleaver
-# 37807, Wrath World, Lydia's Sharpened Swordbreaker
-# 36515, Wrath World, Raider's Cutlass
-# 36516, Wrath World, Tribal Blade
-# 36523, Wrath World, Trollish Slicer
-# 36518, Wrath World, Tundra's Edge
-# 37755, Wrath World, Leggings of the Icy Heart
-# 15547, Classic World, Thick Scale Cloak
-# 3291, Classic World, Ancestral Woollies
-# 3309, Classic World, Barbaric Loincloth
-# 14091, Classic World, Beaded Robe
-# 14369, Classic World, Mystic's Wrap
-# 14372, Classic World, Sanguine Armor
-# 14380, Classic World, Sanguine Robe
-
-# 869, Classic World, Dazzling Longsword
+87514, MoP World, Sharpened Multi-Prong Dagger
+36461, Wrath World, Demon-Skull Orb
+36465, Wrath World, Evergreen Branch
+44310, Wrath World, Namlak's Supernumerary Sticker
+43613, Wrath World, The Dusk Blade
+36698, Wrath World, Conifer Cone Staff
+36544, Wrath World, Journeyed Staff
+37806, Wrath World, Zabra's Misplaced Staff
+36517, Wrath World, Iron-Grip Shortsword
+43611, Wrath World, Krol Cleaver
+37755, Wrath World, Leggings of the Icy Heart
+15547, Classic World, Thick Scale Cloak
+14091, Classic World, Beaded Robe
+14372, Classic World, Sanguine Armor
+14380, Classic World, Sanguine Robe
+869, Classic World, Dazzling Longsword
 2244, Classic World, Krol Blade
-# 13034, Classic World, Speedsteel Rapier
+13034, Classic World, Speedsteel Rapier
 1728, Classic World, Teebu's Blazing Longsword
-# 2011, Classic World, Twisted Sabre
-# 937, Classic World, Black Duskwood Staff
-# 944, Classic World, Elemental Mage Staff
-# 9769, Classic World, Greenweave Branch
-# 15941, Classic World, High Councillor's Scepter
+2011, Classic World, Twisted Sabre
 11168, Classic World, Formula: Shield Lesser Parry
 14510, Classic World, Pattern: Bottomless Bag
 14511, Classic World, Pattern: Gloves of Spell Mastery
-# 4351, Classic World, Pattern: Shadow Hood
+4351, Classic World, Pattern: Shadow Hood
+1391, Westfall, Riverpaw Mystic Staff
+
+# Recipes
+14514, Removed?, Pattern: Robe of the Void
 
 # Skipped TBC
 
@@ -127,3 +103,32 @@ P183, TCG, Ethereal Soul-Trader
 # 118790, WoD World, Sabre of the Faceless Moon
 # 190631, SotFO, Vandalized Ephemera Mitts, Raid Finder
 # 190631, SotFO, Vandalized Ephemera Mitts, Fated Raid Finder
+# 118791, WoD World, Razorcrystal Blade
+# 87478, MoP World, Wand of the Exiled Path
+# 1405, Westfall, Foamspittle Staff
+# 118805, WoD World, Caniki's Cane of Command
+# 153018, ABT, Corrupted Mantle of the Felseekers, Heroic
+# 190631, SotFO, Vandalized Ephemera Mitts, Heroic
+# 190631, SotFO, Vandalized Ephemera Mitts, Fated Heroic
+# 118813, WoD World, Tarred Greatcloak
+# 87510, MoP World, Buc-Zakai Bugslicer
+# 3291, Classic World, Ancestral Woollies
+# 36516, Wrath World, Tribal Blade
+# 36515, Wrath World, Raider's Cutlass
+# 3309, Classic World, Barbaric Loincloth
+# 168602, EP, Cloak of Blessed Depths, Heroic
+# 152084, ABT, Gloves of Abhorrent Strategies
+# 36405, Wrath World, Double Cape
+# 14369, Classic World, Mystic's Wrap
+# 118812, WoD World, Flamelicked Cloak of Kaufebyrd
+# 37807, Wrath World, Lydia's Sharpened Swordbreaker
+# 118809, WoD World, Eldodin's Elegant Drape
+# 9769, Classic World, Greenweave Branch
+# 937, Classic World, Black Duskwood Staff
+# 116572, WoD World, Skettis Staff
+# 944, Classic World, Elemental Mage Staff
+# 36518, Wrath World, Tundra's Edge
+# 36705, Wrath World, Geyser Staff
+# 15941, Classic World, High Councillor's Scepter
+# 36523, Wrath World, Trollish Slicer
+# 118804, WoD World, Starrgo's Walking Stick
