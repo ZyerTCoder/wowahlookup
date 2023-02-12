@@ -18,11 +18,8 @@ Grabs AH data from chosen servers and lists the cheapest items it finds, example
 .
 ```
 
-Requires your own set of blizzard and tsm authentication credentials which you can find on their [developer](https://develop.battle.net/documentation/guides/getting-started) [websites](https://www.tradeskillmaster.com/user), create a textfile named "credentials" in the same directory as the python script and paste the keys in the following order:
-```
-blizzard client id
-blizzard secret id
-tsm api key
-```
+Requires your own set of blizzard and tsm authentication credentials which you can find on their [developer](https://develop.battle.net/documentation/guides/getting-started) [websites](https://www.tradeskillmaster.com/user). In the /required/ directory, create "blizzard_credentials.txt" containing the client id on the first line and the secret id on the second and create "tsm_credentials.txt" containing just the tsm api key.
 
-Relevant globals can be changed at the top of the python script including your region, realms of interest and extra file names
+Relevant globals can be changed at the top of the python script including your region (only tested for eu) and realms of interest
+
+Files created in /local/ can be deleted without consequence as they only exist to make subsequent runs faster and reduce api calls.
