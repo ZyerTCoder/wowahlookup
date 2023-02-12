@@ -58,7 +58,7 @@ v1.7
 removed l cmd
 links are now hyperlinked on the names
 required files should be on /required/
-saved local files are on /data/ and can be safely deleted
+saved local files are on /local/ and can be safely deleted
 logs are saved on /log/ and log/tracebacks/
 '''
 
@@ -228,9 +228,9 @@ def parse_tsm_data():
 			tsm_data["P" + str(entry["petSpeciesId"])] = entry["marketValue"]
 	logging.info(f"Parsed TSM data for {REGION.upper()}, {len(tsm_data)-1} entries")
 
-	with open(FILE_DIR + "data/tsm_data.json", "w") as f:
+	with open(FILE_DIR + "local/tsm_data.json", "w") as f:
 		json.dump(tsm_data, f, indent="\t")
-		logging.debug(f"Wrote TSM data to data/tsm_data.json")
+		logging.debug(f"Wrote TSM data to local/tsm_data.json")
 	return tsm_data
 
 def get_cheapest(items):
@@ -385,16 +385,16 @@ def check_low_ratio(sorted_items):
 		if item["ratio"] > RATIO_NOTIF_THRESHOLD:
 			print(msg) if msg != "" else print("No good prices found")
 			try:
-				logging.debug("Reading data/last_email.txt")
-				with open(FILE_DIR + "data/last_email.txt") as f:
+				logging.debug("Reading local/last_email.txt")
+				with open(FILE_DIR + "local/last_email.txt") as f:
 					if f.read() == msg:
 						logging.info("Message is the same as the last iteration, not sending")
 						return
 			except FileNotFoundError:
 				pass
 			
-			with open(FILE_DIR + "data/last_email.txt", "w") as f:
-				logging.info("Wrote message to data/last_email.txt")
+			with open(FILE_DIR + "local/last_email.txt", "w") as f:
+				logging.info("Wrote message to local/last_email.txt")
 				f.write(msg)
 				if msg != "":
 					logging.info("Emailing...")
@@ -419,8 +419,8 @@ def populate_realm_slugs(item_list):
 
 	# check local slugs
 	try:
-		logging.debug("Reading data/realm_slugs.json")
-		with open(FILE_DIR + "data/realm_slugs.json") as f:
+		logging.debug("Reading local/realm_slugs.json")
+		with open(FILE_DIR + "local/realm_slugs.json") as f:
 			slugs = json.load(f)
 			slugs = {int(k):v for k,v in slugs.items()}
 	except FileNotFoundError:
@@ -446,9 +446,9 @@ def populate_realm_slugs(item_list):
 
 	# only save if there are updates
 	if missing:
-		with open(FILE_DIR + "data/realm_slugs.json", "w") as f:
+		with open(FILE_DIR + "local/realm_slugs.json", "w") as f:
 			json.dump(slugs, f, indent="\t")
-			logging.debug("Saved realm slugs to data/realm_slugs.json")
+			logging.debug("Saved realm slugs to local/realm_slugs.json")
 
 	for item in item_list:
 		item["realm_slug"] = slugs[item["realm"]]
@@ -506,8 +506,8 @@ def main(args):
 	os.makedirs(FILE_DIR+"data", exist_ok=True)
 	
 	try:
-		logging.debug("Reading data/tsm_data.json")
-		with open(FILE_DIR + "data/tsm_data.json") as f:
+		logging.debug("Reading local/tsm_data.json")
+		with open(FILE_DIR + "local/tsm_data.json") as f:
 			tsm_data = json.load(f)
 			if tsm_data["date"] + 86400 < time():
 				logging.info("Local TSM data is too old, renewing")

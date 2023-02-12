@@ -30,8 +30,8 @@ def get_blizzard_header(region):
 
 	# get from saved file
 	try:
-		with open(FILE_DIR+"data/auth.json") as f:
-			logging.debug(f"Reading data/auth.json")
+		with open(FILE_DIR+"local/auth.json") as f:
+			logging.debug(f"Reading local/auth.json")
 			last_auth = json.load(f)
 			if last_auth.get("expires_on", 0) > time():
 				logging.debug("Saved auth is still valid")
@@ -40,9 +40,9 @@ def get_blizzard_header(region):
 			else:
 				logging.debug("Saved auth has expired")
 	except FileNotFoundError:
-		if not os.path.isdir(FILE_DIR+"data"):
-			os.makedirs(FILE_DIR+"data")
-			logging.debug("Made "+FILE_DIR+"data")
+		if not os.path.isdir(FILE_DIR+"local"):
+			os.makedirs(FILE_DIR+"local")
+			logging.debug("Made "+FILE_DIR+"local")
 
 	# ask blizzard
 	logging.debug(f"Reading {CREDENTIALS}")
@@ -59,8 +59,8 @@ def get_blizzard_header(region):
 	auth = resp
 	logging.debug("Blizzard bearer token obtained")
 	
-	with open(FILE_DIR + "data/auth.json", "w") as f:
+	with open(FILE_DIR + "local/auth.json", "w") as f:
 		resp["expires_on"] = time() + resp["expires_in"]
 		f.write(json.dumps(resp, indent="\t"))
-		logging.debug("Wrote token to data/auth.json")
+		logging.debug("Wrote token to local/auth.json")
 	return {"Authorization": "Bearer " + resp["access_token"]}, params
