@@ -503,7 +503,7 @@ def print_item_links(sorted_items):
 	print(table_headers)
 
 def main(args):
-	os.makedirs(FILE_DIR+"data", exist_ok=True)
+	os.makedirs(FILE_DIR+"local", exist_ok=True)
 	
 	try:
 		logging.debug("Reading local/tsm_data.json")

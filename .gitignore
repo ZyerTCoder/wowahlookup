@@ -1,7 +1,7 @@
 required/tsm_credentials.txt
 required/blizzard_credentials.txt
 log
-data
+local
 items.txt
 run.bat
 __pycache__
