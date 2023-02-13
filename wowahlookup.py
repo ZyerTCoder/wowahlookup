@@ -472,7 +472,6 @@ def populate_realm_slugs(item_list):
 
 	# check if any are missing and download them
 	missing = 0
-	logging.debug("Downloading missing slugs")
 	for realm_id in CONNECTED_REALM_IDS.keys():
 		if realm_id in slugs:
 			continue
@@ -487,6 +486,7 @@ def populate_realm_slugs(item_list):
 
 	# only save if there are updates
 	if missing:
+		logging.debug("Downloaded missing slugs")
 		with open(FILE_DIR + "local/realm_slugs.json", "w") as f:
 			json.dump(slugs, f, indent="\t")
 			logging.debug("Saved realm slugs to local/realm_slugs.json")
