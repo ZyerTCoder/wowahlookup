@@ -17,6 +17,7 @@ TODO
 remake print_items_pretty to be more adaptable 
 '''
 
+import grequests
 import os
 import sys
 import traceback
@@ -31,7 +32,7 @@ from blizzard_auth import get_blizzard_header
 
 APP_NAME = "wowahlookup"
 DESCRIPTION = "Looks up prices of specific items from chosen AHs"
-VERSION = "1.7"
+VERSION = "1.8"
 WORKING_DIR = r"C:"
 LOG_FILE = f'{APP_NAME}v{VERSION}log.txt'
 FILE_DIR = __file__.rsplit("\\", 1)[0] + "\\"
@@ -60,6 +61,9 @@ links are now hyperlinked on the names
 required files should be on /required/
 saved local files are on /local/ and can be safely deleted
 logs are saved on /log/ and log/tracebacks/
+v1.8
+split downloading and parsing ah data into separate functions
+uses grequests to download all AH data at the same time
 '''
 
 BLIZZARD_HOST = "https://eu.api.blizzard.com/"
@@ -133,20 +137,19 @@ def parse_items():
 	logging.debug("Parsed item input")
 	return out
 
-def parse_ahs(item_list, market_values):
+
+# might delete later
+def dl_ah_data():
 	try:
 		bearer, params = get_blizzard_header(REGION)
 	except requests.exceptions.ConnectionError as e:
 		logging.error("Connection error when attempting to get blizzard auths, check your internet connection")
 		return e
-	
-	bonuses = get_bonuses()
 
-	out = {}
-	for key in item_list:
-		out[key] = []
+	ah_data = {}
 
 	for ah, ah_name in CONNECTED_REALM_IDS.items():
+		logging.debug(f"Requesting {ah_name} AH data")
 		try:
 			x = requests.get(
 				f"{BLIZZARD_HOST}data/wow/connected-realm/{ah}/auctions", 
@@ -158,9 +161,47 @@ def parse_ahs(item_list, market_values):
 			logging.error("Failed to get AH data")
 			logging.error(x, x.reason)
 			return
+		ah_data[ah] = json.loads(x.text)["auctions"]
+		logging.info(f"There are {len(ah_data[ah])} items for auction in {ah_name}")
+	
+	return ah_data
 
-		auctions = json.loads(x.text)["auctions"]
-		logging.info(f"There are {len(auctions)} items for auction in {ah_name}")
+def dl_ah_data_grequests():
+	# should have actual error handling but we'll see when we get them
+	try:
+		bearer, params = get_blizzard_header(REGION)
+	except requests.exceptions.ConnectionError as e:
+		logging.error("Connection error when attempting to get blizzard auths, check your internet connection")
+		return e
+
+	def e_handler(request, e):
+		logging.error(f"Request failed: {e}")
+		# TODO stuff
+
+	rs = (
+		grequests.get(
+			f"{BLIZZARD_HOST}data/wow/connected-realm/{ah}/auctions",
+			headers=bearer,
+			params=params)
+		for ah in CONNECTED_REALM_IDS.keys())
+	
+	print("Requestion AH data from blizzard")
+	ah_data = {}
+	for resp, (ah, ah_name) in zip(grequests.map(rs, exception_handler=e_handler), CONNECTED_REALM_IDS.items()):
+		ah_data[ah] = json.loads(resp.text)["auctions"]
+		logging.info(f"There are {len(ah_data[ah])} items for auction in {ah_name}")
+
+	return ah_data
+
+def parse_ahs(item_list, ah_data, market_values):
+	logging.debug("Parsing AH data")
+	bonuses = get_bonuses()
+
+	out = {}
+	for key in item_list:
+		out[key] = []
+
+	for ah, auctions in ah_data.items():
 		for auction in auctions:
 			if (id := str(auction['item']['id'])) in item_list:
 				no_diff_id = True
@@ -198,7 +239,7 @@ def parse_ahs(item_list, market_values):
 						"realm": ah,
 						"market_value": market_values[pet_id],
 					})
-		logging.debug(f"Parsed {ah_name} items")
+		logging.debug(f"Parsed {CONNECTED_REALM_IDS[ah]} items")
 	return out
 
 def parse_tsm_data():
@@ -244,7 +285,7 @@ def get_cheapest(items):
 				if item["auction"]["buyout"] < cheapest[identifier]["auction"]["buyout"]:
 					cheapest[identifier]["auction"]["buyout"] = item["auction"]["buyout"]
 					cheapest[identifier]["realm"] = item["realm"]
-				if  item["auction"].get("bid", float("inf")) < cheapest[identifier]["auction"].get("bid", float("inf")):
+				if item["auction"].get("bid", float("inf")) < cheapest[identifier]["auction"].get("bid", float("inf")):
 					cheapest[identifier]["auction"]["bid"] = item["auction"].get("bid")
 					if cheapest[identifier]["realm"] != item["realm"]:
 						cheapest[identifier]["bid_on_diff_realm"] = item["realm"]
@@ -504,7 +545,7 @@ def print_item_links(sorted_items):
 
 def main(args):
 	os.makedirs(FILE_DIR+"local", exist_ok=True)
-	
+
 	try:
 		logging.debug("Reading local/tsm_data.json")
 		with open(FILE_DIR + "local/tsm_data.json") as f:
@@ -517,7 +558,8 @@ def main(args):
 		tsm_data = parse_tsm_data()
 
 	items = parse_items()
-	relevant_items = parse_ahs(items, tsm_data)
+	ah_data = dl_ah_data_grequests()
+	relevant_items = parse_ahs(items, ah_data, tsm_data)
 	if type(relevant_items) != dict:
 		logging.error(f"Error when parsing AH data: {relevant_items}")
 		return -1
