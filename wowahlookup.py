@@ -185,7 +185,7 @@ def dl_ah_data_grequests():
 			params=params)
 		for ah in CONNECTED_REALM_IDS.keys())
 	
-	print("Requestion AH data from blizzard")
+	print("Requesting AH data from blizzard")
 	ah_data = {}
 	for resp, (ah, ah_name) in zip(grequests.map(rs, exception_handler=e_handler), CONNECTED_REALM_IDS.items()):
 		ah_data[ah] = json.loads(resp.text)["auctions"]
