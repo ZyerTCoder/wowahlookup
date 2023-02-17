@@ -50,13 +50,11 @@ P2894, Revendreth, Burdened Soul
 44310, Wrath World, Namlak's Supernumerary Sticker
 43613, Wrath World, The Dusk Blade
 36698, Wrath World, Conifer Cone Staff
-36544, Wrath World, Journeyed Staff
 37806, Wrath World, Zabra's Misplaced Staff
 36517, Wrath World, Iron-Grip Shortsword
 43611, Wrath World, Krol Cleaver
 37755, Wrath World, Leggings of the Icy Heart
 15547, Classic World, Thick Scale Cloak
-14091, Classic World, Beaded Robe
 14372, Classic World, Sanguine Armor
 14380, Classic World, Sanguine Robe
 869, Classic World, Dazzling Longsword
@@ -132,3 +130,5 @@ P2894, Revendreth, Burdened Soul
 # 15941, Classic World, High Councillor's Scepter
 # 36523, Wrath World, Trollish Slicer
 # 118804, WoD World, Starrgo's Walking Stick
+# 14091, Classic World, Beaded Robe
+# 36544, Wrath World, Journeyed Staff
