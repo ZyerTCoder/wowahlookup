@@ -100,13 +100,14 @@ example item in sorted_items as printed by pprint:
 def get_tsm_header():
 	logging.debug(f"Reading required/tsm_credentials.txt")
 	with open(FILE_DIR + "required/tsm_credentials.txt") as c:
-		lines = [l.strip() for l in c.readlines()]
+		line = c.readline()
 		stuff = {
 			"client_id": "c260f00d-1071-409a-992f-dda2e5498536",
 			"grant_type": "api_token",
 			"scope": "app:realm-api app:pricing-api",
-			"token": lines[0]
+			"token": line
 		}
+	
 	x = requests.post(
 		TSM_AUTH, 
 		data=stuff)
@@ -193,7 +194,7 @@ def dl_ah_data_grequests():
 
 	return ah_data
 
-def parse_ahs(item_list, ah_data, market_values):
+def parse_ahs(item_list, ah_data, market_values=False):
 	logging.debug("Parsing AH data")
 	bonuses = get_bonuses()
 
@@ -218,7 +219,7 @@ def parse_ahs(item_list, ah_data, market_values):
 										"item": item,
 										"auction": auction,
 										"realm": ah,
-										"market_value": market_values[id],
+										"market_value": market_values[id] if market_values else 0,
 									})
 					if no_diff_id:
 						for item in item_list[id]:
@@ -227,17 +228,22 @@ def parse_ahs(item_list, ah_data, market_values):
 									"item": item,
 									"auction": auction,
 									"realm": ah,
-									"market_value": market_values[id],
+									"market_value": market_values[id] if market_values else 0,
 								})
 				else:
-					out[id].append({"item": item_list[id][0], "auction": auction, "realm": ah, "market_value": market_values[id]})
+					out[id].append({
+						"item": item_list[id][0],
+						"auction": auction,
+						"realm": ah,
+						"market_value": market_values[id] if market_values else 0,
+					})
 			elif id == "82800": # Pet Cages
 				if (pet_id := f"P{auction['item']['pet_species_id']}") in item_list:
 					out[pet_id].append({
 						"item": item_list[pet_id][0],
 						"auction": auction,
 						"realm": ah,
-						"market_value": market_values[pet_id],
+						"market_value": market_values[pet_id] if market_values else 0,
 					})
 		logging.debug(f"Parsed {CONNECTED_REALM_IDS[ah]} items")
 	return out
@@ -254,10 +260,13 @@ def parse_tsm_data():
 	except requests.exceptions.ConnectionError as e:
 		logging.error("Connection error when attempting to get tsm data, check your internet connection")
 		return e
+	except FileNotFoundError as e:
+		logging.warning("required/tsm_credentials.txt missing, proceeding without tsm data")
+		return False
 	if tsm_resp.status_code != 200:
 		logging.error("Failted to get TSM data")
 		logging.error(tsm_resp, tsm_resp.reason)
-		return
+		return False
 	items = json.loads(tsm_resp.text)
 
 	logging.debug(f"Parsing TSM data for {REGION.upper()}")
@@ -294,7 +303,7 @@ def get_cheapest(items):
 def populate_ratios(items):
 	for item in items.values():
 		ratio_against = min(item["auction"].get("bid", float("inf")), item["auction"]["buyout"])
-		item["ratio"] = ratio_against/item["market_value"]
+		item["ratio"] = ratio_against/item["market_value"] if item["market_value"] else 0
 
 def pad_value(val, pad):
 	return str(val) + " "*(pad - len(str(val)))
@@ -559,7 +568,7 @@ def main(args):
 
 	items = parse_items()
 	ah_data = dl_ah_data_grequests()
-	relevant_items = parse_ahs(items, ah_data, tsm_data)
+	relevant_items = parse_ahs(items, ah_data, market_values=tsm_data)
 	if type(relevant_items) != dict:
 		logging.error(f"Error when parsing AH data: {relevant_items}")
 		return -1
