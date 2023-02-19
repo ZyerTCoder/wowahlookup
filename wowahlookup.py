@@ -254,8 +254,8 @@ def parse_tsm_data():
 		case "eu": r = 2
 	
 	try:
-		logging.info("Downloading TSM AH data")
 		bearer = get_tsm_header()
+		logging.info("Downloading TSM AH data")
 		tsm_resp = requests.get(f"{TSM_PRICE}region/{r}", headers=bearer)
 	except requests.exceptions.ConnectionError as e:
 		logging.error("Connection error when attempting to get tsm data, check your internet connection")
@@ -568,7 +568,12 @@ def main(args):
 
 	items = parse_items()
 	ah_data = dl_ah_data_grequests()
+	if type(ah_data) != dict:
+		logging.error("No AH data available, exiting")
+		return -1
+
 	relevant_items = parse_ahs(items, ah_data, market_values=tsm_data)
+	
 	if type(relevant_items) != dict:
 		logging.error(f"Error when parsing AH data: {relevant_items}")
 		return -1
