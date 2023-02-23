@@ -23,7 +23,6 @@
 9429, Uldaman, Miner's Hat of the Deep
 9431, Uldaman, Papal Fez
 
-
 # Mounts
 163573, BFA World, Goldenmane's Reins
 163574, BFA World, Chewed-On Mule
@@ -44,8 +43,6 @@ P2894, Revendreth, Burdened Soul
 159840, BFA World, Teebu's Scorching Straight Sword
 118808, WoD World, Highmaul Magi Scarf
 118850, WoD World, Transcription of Hir Oto'ro
-87514, MoP World, Sharpened Multi-Prong Dagger
-36461, Wrath World, Demon-Skull Orb
 36465, Wrath World, Evergreen Branch
 44310, Wrath World, Namlak's Supernumerary Sticker
 43613, Wrath World, The Dusk Blade
@@ -132,3 +129,5 @@ P2894, Revendreth, Burdened Soul
 # 118804, WoD World, Starrgo's Walking Stick
 # 14091, Classic World, Beaded Robe
 # 36544, Wrath World, Journeyed Staff
+# 36461, Wrath World, Demon-Skull Orb
+# 87514, MoP World, Sharpened Multi-Prong Dagger
