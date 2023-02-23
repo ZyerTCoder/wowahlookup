@@ -175,9 +175,15 @@ def dl_ah_data_grequests():
 		logging.error("Connection error when attempting to get blizzard auths, check your internet connection")
 		return e
 
+	error_flag = False
 	def e_handler(request, e):
-		logging.error(f"Request failed: {e}")
-		# TODO stuff
+		nonlocal error_flag
+		if type(e) == requests.exceptions.ConnectionError and not error_flag:
+			logging.error("Connection error when attempting to download AH data, check your internet connection")
+			error_flag = True
+		if type(e) != requests.exceptions.ConnectionError:
+			logging.error(f"Request {type(e)=}failed for unchecked reason: {e}")
+			error_flag = True
 
 	rs = (
 		grequests.get(
@@ -189,6 +195,8 @@ def dl_ah_data_grequests():
 	print("Requesting AH data from blizzard")
 	ah_data = {}
 	for resp, (ah, ah_name) in zip(grequests.map(rs, exception_handler=e_handler), CONNECTED_REALM_IDS.items()):
+		if error_flag:
+			return -1
 		ah_data[ah] = json.loads(resp.text)["auctions"]
 		logging.info(f"There are {len(ah_data[ah])} items for auction in {ah_name}")
 
