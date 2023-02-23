@@ -42,7 +42,6 @@ P2894, Revendreth, Burdened Soul
 187024, Korthia, Necromancer's Mantle
 159840, BFA World, Teebu's Scorching Straight Sword
 118808, WoD World, Highmaul Magi Scarf
-118850, WoD World, Transcription of Hir Oto'ro
 36465, Wrath World, Evergreen Branch
 44310, Wrath World, Namlak's Supernumerary Sticker
 43613, Wrath World, The Dusk Blade
@@ -131,3 +130,4 @@ P2894, Revendreth, Burdened Soul
 # 36544, Wrath World, Journeyed Staff
 # 36461, Wrath World, Demon-Skull Orb
 # 87514, MoP World, Sharpened Multi-Prong Dagger
+# 118850, WoD World, Transcription of Hir Oto'ro
