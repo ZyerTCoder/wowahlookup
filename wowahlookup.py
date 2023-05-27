@@ -8,6 +8,7 @@ MAX_ITEM_NAME_LENGTH = 25
 RATIO_NOTIF_THRESHOLD = .1
 REGION = "eu" # eu/us
 ITEM_LIST = "items.txt"
+TSM_DATA_EXPIRE_TIME = 86400 * 2
 '''
 required/tsm_credentials.txt should contain only the tsm api key
 '''
@@ -29,10 +30,11 @@ import json
 from win10toast import ToastNotifier
 from dataclasses import dataclass
 from blizzard_auth import get_blizzard_header
+from urllib.parse import quote as urllib_quote
 
 APP_NAME = "wowahlookup"
 DESCRIPTION = "Looks up prices of specific items from chosen AHs"
-VERSION = "1.8"
+VERSION = "1.9"
 WORKING_DIR = r"C:"
 LOG_FILE = f'{APP_NAME}v{VERSION}log.txt'
 FILE_DIR = __file__.rsplit("\\", 1)[0] + "\\"
@@ -64,6 +66,9 @@ logs are saved on /log/ and log/tracebacks/
 v1.8
 split downloading and parsing ah data into separate functions
 uses grequests to download all AH data at the same time
+v1.9
+fixed urls to use undermine.exchange instead
+added TSM_DATA_EXPIRE_TIME as a global at the start of the file
 '''
 
 BLIZZARD_HOST = "https://eu.api.blizzard.com/"
@@ -392,10 +397,10 @@ def print_items_pretty(sorted_items):
 
 	sorted_items = populate_realm_slugs(sorted_items)
 	for item in sorted_items:
-		if item["item"].id[0] == "P": # a pet
-			item["link"] = f"https://theunderminejournal.com/#{REGION}/{item['realm_slug']}/battlepet/{item['item'].id[1:]}"
-		else:
-			item["link"] = f"https://theunderminejournal.com/#{REGION}/{item['realm_slug']}/item/{item['item'].id}"
+		# if item["item"].id[0] == "P": # a pet
+		# 	f"https://theunderminejournal.com/#{REGION}/{item['realm_slug']}/battlepet/{item['item'].id[1:]}"
+		# else:
+		item["link"] = f"https://undermine.exchange/#{REGION}-{item['realm_slug']}/search/{urllib_quote(item['item'].name)}"
 		item["hyperlink_string"] = f"\033]8;;{item['link']}\033\\{item['item'].name}\033]8;;\033\\"
 
 
@@ -559,7 +564,7 @@ def main(args):
 		logging.debug("Reading local/tsm_data.json")
 		with open(FILE_DIR + "local/tsm_data.json") as f:
 			tsm_data = json.load(f)
-			if tsm_data["date"] + 86400 < time():
+			if tsm_data["date"] + TSM_DATA_EXPIRE_TIME < time():
 				logging.info("Local TSM data is too old, renewing")
 				raise FileNotFoundError
 			logging.info("Local TSM data still fresh, reusing")
