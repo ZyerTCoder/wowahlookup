@@ -9,14 +9,10 @@
 165925, BoD, Drape of Valiant Defense, Raid Finder
 168602, EP, Cloak of Blessed Depths, Raid Finder
 168602, EP, Cloak of Blessed Depths, Mythic
-184778, CN, Decadent Nathrian Shawl, Mythic
-184778, CN, Decadent Nathrian Shawl, Fated Mythic
 190631, SotFO, Vandalized Ephemera Mitts
 190631, SotFO, Vandalized Ephemera Mitts, Fated Normal
 190631, SotFO, Vandalized Ephemera Mitts, Mythic
 190631, SotFO, Vandalized Ephemera Mitts, Fated Mythic
-190334, SotFO, Origin, Mythic
-190334, SotFO, Origin, Fated Mythic
 
 # Dungeon BoEs
 9424, Uldaman, Ginn-Su Sword
@@ -38,24 +34,19 @@ P2894, Revendreth, Burdened Soul
 # Toys
 
 # World Drops
+194262, Thaldraszus, Pattern: Temporal Spellthread
 187097, Korthia, Construct's Shoulderplates
 187024, Korthia, Necromancer's Mantle
 159840, BFA World, Teebu's Scorching Straight Sword
 118808, WoD World, Highmaul Magi Scarf
 118850, WoD World, Transcription of Hir Oto'ro
-36465, Wrath World, Evergreen Branch
-44310, Wrath World, Namlak's Supernumerary Sticker
 43613, Wrath World, The Dusk Blade
-36698, Wrath World, Conifer Cone Staff
-37806, Wrath World, Zabra's Misplaced Staff
 36517, Wrath World, Iron-Grip Shortsword
 43611, Wrath World, Krol Cleaver
-37755, Wrath World, Leggings of the Icy Heart
 15547, Classic World, Thick Scale Cloak
 14372, Classic World, Sanguine Armor
 14380, Classic World, Sanguine Robe
 869, Classic World, Dazzling Longsword
-2244, Classic World, Krol Blade
 13034, Classic World, Speedsteel Rapier
 1728, Classic World, Teebu's Blazing Longsword
 2011, Classic World, Twisted Sabre
@@ -63,7 +54,6 @@ P2894, Revendreth, Burdened Soul
 14510, Classic World, Pattern: Bottomless Bag
 14511, Classic World, Pattern: Gloves of Spell Mastery
 4351, Classic World, Pattern: Shadow Hood
-1391, Westfall, Riverpaw Mystic Staff
 
 # Recipes
 14514, Removed?, Pattern: Robe of the Void
@@ -131,3 +121,14 @@ P2894, Revendreth, Burdened Soul
 # 36544, Wrath World, Journeyed Staff
 # 36461, Wrath World, Demon-Skull Orb
 # 87514, MoP World, Sharpened Multi-Prong Dagger
+# 37806, Wrath World, Zabra's Misplaced Staff
+# 184778, CN, Decadent Nathrian Shawl, Mythic
+# 184778, CN, Decadent Nathrian Shawl, Fated Mythic
+# 44310, Wrath World, Namlak's Supernumerary Sticker
+# 36465, Wrath World, Evergreen Branch
+# 1391, Westfall, Riverpaw Mystic Staff
+# 36698, Wrath World, Conifer Cone Staff
+# 37755, Wrath World, Leggings of the Icy Heart
+# 190334, SotFO, Origin, Mythic
+# 190334, SotFO, Origin, Fated Mythic
+# 2244, Classic World, Krol Blade
