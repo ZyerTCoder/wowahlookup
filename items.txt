@@ -13,6 +13,17 @@
 190631, SotFO, Vandalized Ephemera Mitts, Fated Normal
 190631, SotFO, Vandalized Ephemera Mitts, Mythic
 190631, SotFO, Vandalized Ephemera Mitts, Fated Mythic
+202003, VotI, Primal Seeker's Leggings, Raid Finder
+202003, VotI, Primal Seeker's Leggings
+202003, VotI, Primal Seeker's Leggings, Heroic
+202003, VotI, Primal Seeker's Leggings, Mythic
+204410, Aberrus, Bands of Purified Purpose
+204410, Aberrus, Bands of Purified Purpose, Heroic
+204410, Aberrus, Bands of Purified Purpose, Mythic
+204411, Aberrus, Crucible Curator's Wingspan, Raid Finder
+204411, Aberrus, Crucible Curator's Wingspan
+204411, Aberrus, Crucible Curator's Wingspan, Heroic
+204411, Aberrus, Crucible Curator's Wingspan, Mythic
 
 # Dungeon BoEs
 9424, Uldaman, Ginn-Su Sword
@@ -46,7 +57,6 @@ P2894, Revendreth, Burdened Soul
 15547, Classic World, Thick Scale Cloak
 14372, Classic World, Sanguine Armor
 14380, Classic World, Sanguine Robe
-869, Classic World, Dazzling Longsword
 13034, Classic World, Speedsteel Rapier
 1728, Classic World, Teebu's Blazing Longsword
 2011, Classic World, Twisted Sabre
@@ -132,3 +142,5 @@ P2894, Revendreth, Burdened Soul
 # 190334, SotFO, Origin, Mythic
 # 190334, SotFO, Origin, Fated Mythic
 # 2244, Classic World, Krol Blade
+# 204410, Aberrus, Bands of Purified Purpose, Raid Finder
+# 869, Classic World, Dazzling Longsword
