@@ -9,13 +9,17 @@ RATIO_NOTIF_THRESHOLD = .1
 REGION = "eu" # eu/us
 ITEM_LIST = "items.txt"
 TSM_DATA_EXPIRE_TIME = 86400 * 2
+RAIDBOTS_BONUSES_DATA_EXPIRE_TIME = 86400 * 14
+
 '''
 required/tsm_credentials.txt should contain only the tsm api key
 '''
 
 '''
 TODO
-remake print_items_pretty to be more adaptable 
+fix inconsistencies with local saves for tsm/raidbots/slugs
+rewrite in the image of raidbots one
+also make is so if you cant download and there is an old local one, use it anyway
 '''
 
 import grequests
@@ -34,7 +38,7 @@ from urllib.parse import quote as urllib_quote
 
 APP_NAME = "wowahlookup"
 DESCRIPTION = "Looks up prices of specific items from chosen AHs"
-VERSION = "1.9"
+VERSION = "1.10"
 WORKING_DIR = r"C:"
 LOG_FILE = f'{APP_NAME}v{VERSION}log.txt'
 FILE_DIR = __file__.rsplit("\\", 1)[0] + "\\"
@@ -69,12 +73,15 @@ uses grequests to download all AH data at the same time
 v1.9
 fixed urls to use undermine.exchange instead
 added TSM_DATA_EXPIRE_TIME as a global at the start of the file
+v1.10
+item bonuses data is now downloaded from raidbots
 '''
 
 BLIZZARD_HOST = "https://eu.api.blizzard.com/"
 TSM_AUTH = "https://auth.tradeskillmaster.com/oauth2/token"
 TSM_REALM = "https://realm-api.tradeskillmaster.com/"
 TSM_PRICE = "https://pricing-api.tradeskillmaster.com/"
+RAIDBOTS_BONUSES_DATA_HOST = "https://www.raidbots.com/static/data/live/bonuses.json"
 
 @dataclass
 class Item:
@@ -124,9 +131,40 @@ def get_tsm_header():
 	return {"Authorization": "Bearer " + r["access_token"]}
 
 def get_bonuses():
-	logging.debug(f"Reading required/bonuses.json")
-	with open(FILE_DIR + "required/bonuses.json") as f:
-		return json.loads(f.read())
+	bonuses = 0
+	try: # checking for local data
+		logging.debug(f"Reading local/bonuses.json")
+		with open(FILE_DIR + "local/bonuses.json") as f:
+			bonuses = json.load(f)
+			if os.path.getmtime(FILE_DIR + "local/bonuses.json") + RAIDBOTS_BONUSES_DATA_EXPIRE_TIME > time():
+				logging.info("Local item bonuses data still fresh, reusing")
+				return bonuses
+			logging.info("Local item bonuses data is too old, redownloading")
+	except FileNotFoundError:
+		logging.debug("No local item bonuses data found")
+
+	try: # downloading new data
+		logging.info("Downloading item bonuses data from Raidbots")
+		resp = requests.get(RAIDBOTS_BONUSES_DATA_HOST)
+	except ConnectionError as e:
+		logging.error("Connection error when attempting to download raidbots bonuses data, check your internet connection")
+		if bonuses:
+			logging.info("Using possibly outdated local raidbots data")
+			return bonuses
+		return e
+	if resp.status_code != 200:
+		logging.error("Failed to get Raidbots data", resp, resp.reason)
+		if bonuses:
+			logging.info("Using possibly outdated local raidbots data")
+			return bonuses
+		return e
+	
+	bonuses = json.loads(resp.text)
+
+	with open(FILE_DIR + "local/bonuses.json", "w") as f:
+			json.dump(bonuses, f, indent="\t")
+			logging.debug("Saved item bonuses data from Raidbots to local/bonuses.json")
+	return bonuses
 
 def parse_items():
 	logging.debug(f"Reading {ITEM_LIST}")
@@ -142,7 +180,6 @@ def parse_items():
 			out[id].append(Item(id, source, name, diff))
 	logging.debug("Parsed item input")
 	return out
-
 
 # might delete later
 def dl_ah_data():
@@ -488,7 +525,7 @@ def populate_realm_slugs(item_list):
 	missing = 0
 	for realm_id in CONNECTED_REALM_IDS.keys():
 		if realm_id in slugs:
-			continue
+			continue # skip if already exists
 
 		missing += 1
 		resp = requests.get(
