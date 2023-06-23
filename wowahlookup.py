@@ -137,7 +137,7 @@ def get_bonuses():
 		with open(FILE_DIR + "local/bonuses.json") as f:
 			bonuses = json.load(f)
 			if os.path.getmtime(FILE_DIR + "local/bonuses.json") + RAIDBOTS_BONUSES_DATA_EXPIRE_TIME > time():
-				logging.info("Local item bonuses data still fresh, reusing")
+				logging.debug("Local item bonuses data still fresh, reusing")
 				return bonuses
 			logging.info("Local item bonuses data is too old, redownloading")
 	except FileNotFoundError:
@@ -695,7 +695,7 @@ if __name__ == '__main__':
 
 		def uncaught_exception_hook(exc_type, exc_value, exc_traceback):
 			traceback_file_path = FILE_DIR+f"log/traceback/TRACEBACK{time()}"+LOG_FILE
-			os.makedirs(FILE_DIR+"errorlog", exist_ok=True)
+			os.makedirs(FILE_DIR+"log/errorlog", exist_ok=True)
 			with open(traceback_file_path, mode="a") as traceback_file:
 				traceback_file.write(f"Uncaught exception, type: {exc_type.__name__}")
 				traceback.print_exception(exc_value, file=traceback_file)
