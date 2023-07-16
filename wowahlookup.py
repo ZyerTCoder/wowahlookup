@@ -173,7 +173,11 @@ def parse_items():
 	out = {}
 	for item in items:
 		item.append("Normal") # append default value for diff
-		id, source, name, diff, *_ = item
+		try:
+			id, source, name, diff, *_ = item
+		except ValueError as e:
+			logging.error(f"ValueError while unpacking the following entry: {item}")
+			exit()
 		if id not in out:
 			out[id] = [Item(id, source, name, diff)]
 		else:
@@ -604,7 +608,7 @@ def main(args):
 			if tsm_data["date"] + TSM_DATA_EXPIRE_TIME < time():
 				logging.info("Local TSM data is too old, renewing")
 				raise FileNotFoundError
-			logging.info("Local TSM data still fresh, reusing")
+			logging.debug("Local TSM data still fresh, reusing")
 	except FileNotFoundError:
 		tsm_data = parse_tsm_data()
 

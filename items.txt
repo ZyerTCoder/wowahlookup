@@ -2,11 +2,11 @@
 # will fail to parse if these are not provided 
 
 # Raid BoEs
+12552, BRD, Blisterbane Wrap
 144400, NH, Feathermane Feather Cloak, Raid Finder
 144403, NH, Fashionable Autumn Cloak, Raid Finder
 152084, ABT, Gloves of Abhorrent Strategies, Heroic
 153018, ABT, Corrupted Mantle of the Felseekers
-165925, BoD, Drape of Valiant Defense, Raid Finder
 168602, EP, Cloak of Blessed Depths, Raid Finder
 168602, EP, Cloak of Blessed Depths, Mythic
 190631, SotFO, Vandalized Ephemera Mitts
@@ -54,20 +54,26 @@ P2894, Revendreth, Burdened Soul
 43613, Wrath World, The Dusk Blade
 36517, Wrath World, Iron-Grip Shortsword
 43611, Wrath World, Krol Cleaver
-15547, Classic World, Thick Scale Cloak
 14372, Classic World, Sanguine Armor
 14380, Classic World, Sanguine Robe
-13034, Classic World, Speedsteel Rapier
 1728, Classic World, Teebu's Blazing Longsword
-2011, Classic World, Twisted Sabre
+4351, Classic World, Pattern: Shadow Hood
+1757, Classic World, Reinforced Chain Cloak
+1749, Classic World, Linked Chain Cloak
+4668, Classic World, Battle Chain Cloak
+4680, Classic World, Brackwater Cloak
+6549, Classic World, Soldier's Cloak
+201031, DF World, Nokhudon Cloak
+32540, Terokk, Terokk's Might
+118808, WoD World, Highmaul Magi Scarf
+32665, TBC World, Crystalweave Cape
+201041, DF World, Citadel Crusher's Cloak
+
+# Recipes
 11168, Classic World, Formula: Shield Lesser Parry
 14510, Classic World, Pattern: Bottomless Bag
 14511, Classic World, Pattern: Gloves of Spell Mastery
-4351, Classic World, Pattern: Shadow Hood
-
-# Recipes
-14514, Removed?, Pattern: Robe of the Void
-
+67541, Cata World, Pattern: High Society Top Hat
 # Skipped TBC
 
 # Other
@@ -144,3 +150,8 @@ P2894, Revendreth, Burdened Soul
 # 2244, Classic World, Krol Blade
 # 204410, Aberrus, Bands of Purified Purpose, Raid Finder
 # 869, Classic World, Dazzling Longsword
+# 2011, Classic World, Twisted Sabre
+# 15547, Classic World, Thick Scale Cloak
+# 13034, Classic World, Speedsteel Rapier
+# 165925, BoD, Drape of Valiant Defense, Raid Finder
+# 14514, Removed?, Pattern: Robe of the Void
