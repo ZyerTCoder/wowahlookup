@@ -71,7 +71,6 @@ P2894, Revendreth, Burdened Soul
 
 # Recipes
 11168, Classic World, Formula: Shield Lesser Parry
-14510, Classic World, Pattern: Bottomless Bag
 14511, Classic World, Pattern: Gloves of Spell Mastery
 67541, Cata World, Pattern: High Society Top Hat
 # Skipped TBC
@@ -155,3 +154,4 @@ P2894, Revendreth, Burdened Soul
 # 13034, Classic World, Speedsteel Rapier
 # 165925, BoD, Drape of Valiant Defense, Raid Finder
 # 14514, Removed?, Pattern: Robe of the Void
+# 14510, Classic World, Pattern: Bottomless Bag
