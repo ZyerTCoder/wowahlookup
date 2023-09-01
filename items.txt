@@ -2,7 +2,6 @@
 # will fail to parse if these are not provided 
 
 # Raid BoEs
-12552, BRD, Blisterbane Wrap
 144400, NH, Feathermane Feather Cloak, Raid Finder
 144403, NH, Fashionable Autumn Cloak, Raid Finder
 152084, ABT, Gloves of Abhorrent Strategies, Heroic
@@ -26,9 +25,23 @@
 204411, Aberrus, Crucible Curator's Wingspan, Mythic
 
 # Dungeon BoEs
+3415, Blackfathom Deeps, Staff of the Friar
+12552, BRD, Blisterbane Wrap
+12532, BRD, Spire of the Stoneshaper
 9424, Uldaman, Ginn-Su Sword
 9429, Uldaman, Miner's Hat of the Deep
 9431, Uldaman, Papal Fez
+10574, Razorfen Downs, Corpseshroud
+10578, Razorfen Downs, Thoughtcast Boots
+776, Razorfen Kraul, Vendetta
+5756, Scarlet Mon, Sliverblade
+1992, Scarlet Mon, Swampchill Fetish
+7757, Scarlet Mon, Windweaver Staff
+2292, Shadowfang Keep, Necrology Robes
+1482, Shadowfang Keep, Shadowfang
+10627, Atak'hakkar, Bludgeon of the Grinning Dog
+10625, Atak'hakkar, Stealthblade
+10630, Atak'hakkar, Soulcatcher Halo
 
 # Mounts
 163573, BFA World, Goldenmane's Reins
@@ -42,6 +55,10 @@
 P2938, Bastion, Gilded Wader
 P183, TCG, Ethereal Soul-Trader
 P2894, Revendreth, Burdened Soul
+P1563, Blasted Lands, Bronze Whelpling
+P42, Hillsbrad Foothills, Black Tabby Cat
+P234, Zul'drak, Gundrak Hatchling
+
 # Toys
 
 # World Drops
@@ -55,7 +72,6 @@ P2894, Revendreth, Burdened Soul
 43613, Wrath World, The Dusk Blade
 36517, Wrath World, Iron-Grip Shortsword
 43611, Wrath World, Krol Cleaver
-14372, Classic World, Sanguine Armor
 14380, Classic World, Sanguine Robe
 1728, Classic World, Teebu's Blazing Longsword
 4351, Classic World, Pattern: Shadow Hood
@@ -69,6 +85,29 @@ P2894, Revendreth, Burdened Soul
 118808, WoD World, Highmaul Magi Scarf
 32665, TBC World, Crystalweave Cape
 201041, DF World, Citadel Crusher's Cloak
+21005, Sunstrider Isle, Unkempt Gloves
+21007, Sunstrider Isle, Unkempt Robe
+11166, Arathi, Enchant Gloves - Skinning
+118675, Blasted Lands, Time-Locked Box (Bronze Whelpling)
+2787, Dun Morogh, Trogg Dagger
+16252, Eastearn Plaguelands, Enchant Weapon - Crusader
+23923, Ghostlands Chest, Amani Sacrificial Dagger
+11152, Hillsbrad Foothills, Enchant Gloves - Fishing
+8491, Hillsbrad Foothills, Cat Carrier (Black Tabby)
+2268, Loch Modan, Stonesplinter Blade
+1659, N STV, Engineering Gloves
+2955, STV, First Mate Hat
+31264, Bloodmyst Isle, Silvermoon Robes
+23909, Azyremyst Isle, Blood Elf Bandit Mask
+5107, N Barrens, Deckhand's Shirt
+44703, Howling Fjord Fishing, Dark Herring
+48116, Zul'drak, Gundrak Hatchling
+
+
+# Vendor Rare
+13895, Moonglade Vendor, Formal Dangui
+13900, Moonglade Vendor, Green Wedding Hanbok
+13899, Moonglade Vendor, Red Traditional Hanbok
 
 # Recipes
 11168, Classic World, Formula: Shield Lesser Parry
@@ -81,6 +120,8 @@ P2894, Revendreth, Burdened Soul
 3670, SL Pet Grey, Large Slimy Bone
 3300, SL Pet Grey, Rabbit's Foot
 11406, SL Pet Grey, Rotting Bear Carcass
+45998, Old Dala Fishing, Battered Jungle Hat
+45861, Old Dala Fishing, Diamond-Tipped Cane
 
 # Bought
 # 187019, Korthia, Infiltrator's Shoulderguards
@@ -157,3 +198,5 @@ P2894, Revendreth, Burdened Soul
 # 165925, BoD, Drape of Valiant Defense, Raid Finder
 # 14514, Removed?, Pattern: Robe of the Void
 # 14510, Classic World, Pattern: Bottomless Bag
+# 14372, Classic World, Sanguine Armor
+# 18337, Dire Maul, Orphic Bracers
