@@ -34,8 +34,6 @@
 10574, Razorfen Downs, Corpseshroud
 10578, Razorfen Downs, Thoughtcast Boots
 776, Razorfen Kraul, Vendetta
-5756, Scarlet Mon, Sliverblade
-1992, Scarlet Mon, Swampchill Fetish
 7757, Scarlet Mon, Windweaver Staff
 2292, Shadowfang Keep, Necrology Robes
 1482, Shadowfang Keep, Shadowfang
