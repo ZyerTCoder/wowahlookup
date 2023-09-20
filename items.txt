@@ -95,7 +95,6 @@ P234, Zul'drak, Gundrak Hatchling
 2268, Loch Modan, Stonesplinter Blade
 1659, N STV, Engineering Gloves
 2955, STV, First Mate Hat
-31264, Bloodmyst Isle, Silvermoon Robes
 23909, Azyremyst Isle, Blood Elf Bandit Mask
 5107, N Barrens, Deckhand's Shirt
 44703, Howling Fjord Fishing, Dark Herring
@@ -198,3 +197,4 @@ P234, Zul'drak, Gundrak Hatchling
 # 14510, Classic World, Pattern: Bottomless Bag
 # 14372, Classic World, Sanguine Armor
 # 18337, Dire Maul, Orphic Bracers
+# 31264, Bloodmyst Isle, Silvermoon Robes
