@@ -99,7 +99,9 @@ P234, Zul'drak, Gundrak Hatchling
 5107, N Barrens, Deckhand's Shirt
 44703, Howling Fjord Fishing, Dark Herring
 48116, Zul'drak, Gundrak Hatchling
-
+2620, Desolace BoE, Augural Shroud
+6333, Darkshore Rare, Spikelash Dagger
+1384, Mulgore BoE, Dull Blade
 
 # Vendor Rare
 13895, Moonglade Vendor, Formal Dangui
