@@ -20,26 +20,22 @@
 204410, Aberrus, Bands of Purified Purpose, Heroic
 204410, Aberrus, Bands of Purified Purpose, Mythic
 204411, Aberrus, Crucible Curator's Wingspan, Raid Finder
-204411, Aberrus, Crucible Curator's Wingspan
-204411, Aberrus, Crucible Curator's Wingspan, Heroic
 204411, Aberrus, Crucible Curator's Wingspan, Mythic
+208431, Amirdrassil, Lost Scholar's Temporal Shoulderdials, Raid Finder
+208431, Amirdrassil, Lost Scholar's Temporal Shoulderdials
+208431, Amirdrassil, Lost Scholar's Temporal Shoulderdials, Heroic
+208431, Amirdrassil, Lost Scholar's Temporal Shoulderdials, Mythic
+
 
 # Dungeon BoEs
-3415, Blackfathom Deeps, Staff of the Friar
-12552, BRD, Blisterbane Wrap
 12532, BRD, Spire of the Stoneshaper
 9424, Uldaman, Ginn-Su Sword
 9429, Uldaman, Miner's Hat of the Deep
 9431, Uldaman, Papal Fez
-10574, Razorfen Downs, Corpseshroud
-10578, Razorfen Downs, Thoughtcast Boots
-776, Razorfen Kraul, Vendetta
 7757, Scarlet Mon, Windweaver Staff
 2292, Shadowfang Keep, Necrology Robes
 1482, Shadowfang Keep, Shadowfang
-10627, Atak'hakkar, Bludgeon of the Grinning Dog
 10625, Atak'hakkar, Stealthblade
-10630, Atak'hakkar, Soulcatcher Halo
 
 # Mounts
 163573, BFA World, Goldenmane's Reins
@@ -60,59 +56,63 @@ P234, Zul'drak, Gundrak Hatchling
 # Toys
 
 # World Drops
-194262, Thaldraszus, Pattern: Temporal Spellthread
-187097, Korthia, Construct's Shoulderplates
-187024, Korthia, Necromancer's Mantle
-159840, BFA World, Teebu's Scorching Straight Sword
-118808, WoD World, Highmaul Magi Scarf
-36465, Wrath World, Evergreen Branch
-44310, Wrath World, Namlak's Supernumerary Sticker
-43613, Wrath World, The Dusk Blade
-36517, Wrath World, Iron-Grip Shortsword
-43611, Wrath World, Krol Cleaver
-14380, Classic World, Sanguine Robe
 1728, Classic World, Teebu's Blazing Longsword
-4351, Classic World, Pattern: Shadow Hood
-1757, Classic World, Reinforced Chain Cloak
-1749, Classic World, Linked Chain Cloak
-4668, Classic World, Battle Chain Cloak
-4680, Classic World, Brackwater Cloak
-6549, Classic World, Soldier's Cloak
-201031, DF World, Nokhudon Cloak
-32540, Terokk, Terokk's Might
-118808, WoD World, Highmaul Magi Scarf
-32665, TBC World, Crystalweave Cape
-201041, DF World, Citadel Crusher's Cloak
-21005, Sunstrider Isle, Unkempt Gloves
-21007, Sunstrider Isle, Unkempt Robe
-11166, Arathi, Enchant Gloves - Skinning
-118675, Blasted Lands, Time-Locked Box (Bronze Whelpling)
+9718, Classic World, Reforged Blade of Heroes
+9719, Classic World, Broken Blade of Heroes
 2787, Dun Morogh, Trogg Dagger
+2620, Desolace BoE, Augural Shroud
 16252, Eastearn Plaguelands, Enchant Weapon - Crusader
 23923, Ghostlands Chest, Amani Sacrificial Dagger
 11152, Hillsbrad Foothills, Enchant Gloves - Fishing
-8491, Hillsbrad Foothills, Cat Carrier (Black Tabby)
-2268, Loch Modan, Stonesplinter Blade
-1659, N STV, Engineering Gloves
-2955, STV, First Mate Hat
-23909, Azyremyst Isle, Blood Elf Bandit Mask
 5107, N Barrens, Deckhand's Shirt
-44703, Howling Fjord Fishing, Dark Herring
+32540, Terokk, Terokk's Might
+23923, Ghostlands Treasure, Amani Sacrificial Dagger
+31340, TBC World, Will of Edward the Odd
+31336, TBC World, Blade of Wizardry
+31331, TBC World, The Night Blade
+31289, TBC World, Staff of Divine Infusion
+30733, TBC Kazzak, Hope Ender
+43613, Wrath World, The Dusk Blade
+43611, Wrath World, Krol Cleaver
 48116, Zul'drak, Gundrak Hatchling
-2620, Desolace BoE, Augural Shroud
-6333, Darkshore Rare, Spikelash Dagger
-1384, Mulgore BoE, Dull Blade
+44703, Howling Fjord Fishing, Dark Herring
+34829, Garrison Fish, Ornate Drinking Stein
+159840, BFA World, Teebu's Scorching Straight Sword
+187097, Korthia, Construct's Shoulderplates
+187024, Korthia, Necromancer's Mantle
+201031, DF World, Nokhudon Cloak
+194262, Thaldraszus, Pattern: Temporal Spellthread
+
+# 10.1.7 BoEs
+4476, Duskwood Rare, Beastwalker Robe
+3227, Duskwood Rare, Nightbane Staff
+2235, Westfall Rare, Brackclaw
+1933, Deadmines Rare, Staff of Conjuring
+3902, Deadmines Rare, Staff of Nobles
+5624, Arathi, Circlet of the Order
+2623, Arathi, Holy Diadem
+4785, S Barrens Rare, Brimstone Belt
+1539, S Barrens Rare, Gnarled Hermit's Staff
+5092, S Barrens, Charred Razormane Wand
+1493, 1k Needles, Heavy Marauder Scimitar
+4437, Silverpine Rare, Channeler's Staff
+10554, Dun Morogh, Foreman Pants
+2114, Dun Morogh, Snowy Robe
+5775, Hillsbrad Foothills, Pattern: Black Silk Pack
+4767, Hillsbrad Foothills, Coppercloth Gloves
 
 # Vendor Rare
 13895, Moonglade Vendor, Formal Dangui
-13900, Moonglade Vendor, Green Wedding Hanbok
-13899, Moonglade Vendor, Red Traditional Hanbok
 
 # Recipes
 11168, Classic World, Formula: Shield Lesser Parry
 14511, Classic World, Pattern: Gloves of Spell Mastery
 67541, Cata World, Pattern: High Society Top Hat
-# Skipped TBC
+22557, TBC World, Formula: Enchant Weapon - Battlemaster
+24304, TBC World, Pattern: Black Belt of Knowledge
+24300, TBC World, Pattern: Cloak of Eternity
+24307, TBC World, Pattern: Manaweave Cloak
+200916, DF Raid, Formula: Illusion: Primal Mastery
 
 # Other
 36812, SL Pet Grey, Ground Gear
@@ -121,6 +121,8 @@ P234, Zul'drak, Gundrak Hatchling
 11406, SL Pet Grey, Rotting Bear Carcass
 45998, Old Dala Fishing, Battered Jungle Hat
 45861, Old Dala Fishing, Diamond-Tipped Cane
+68163, Lockpicking, The Twilight Blade
+88149, Lockpicking, The Gloaming Blade
 
 # Bought
 # 187019, Korthia, Infiltrator's Shoulderguards
@@ -200,3 +202,76 @@ P234, Zul'drak, Gundrak Hatchling
 # 14372, Classic World, Sanguine Armor
 # 18337, Dire Maul, Orphic Bracers
 # 31264, Bloodmyst Isle, Silvermoon Robes
+# 10578, Razorfen Downs, Thoughtcast Boots
+# 1749, Classic World, Linked Chain Cloak
+# 6549, Classic World, Soldier's Cloak
+# 14380, Classic World, Sanguine Robe
+# 10630, Atak'hakkar, Soulcatcher Halo
+# 21005, Sunstrider Isle, Unkempt Gloves
+# 21007, Sunstrider Isle, Unkempt Robe
+# 13900, Moonglade Vendor, Green Wedding Hanbok
+# 13899, Moonglade Vendor, Red Traditional Hanbok
+# 1757, Classic World, Reinforced Chain Cloak
+# 10574, Razorfen Downs, Corpseshroud
+# 36517, Wrath World, Iron-Grip Shortsword
+# 2955, STV, First Mate Hat
+# 23909, Azyremyst Isle, Blood Elf Bandit Mask
+# 36465, Wrath World, Evergreen Branch
+# 118808, WoD World, Highmaul Magi Scarf
+# 118675, Blasted Lands, Time-Locked Box (Bronze Whelpling)
+# 10627, Atak'hakkar, Bludgeon of the Grinning Dog
+# 3328, Tirisfal, Spider Web Robe
+# 4261, Tirisfal, Solliden's Trousers
+# 5767, Dun Morogh, Violet Robes
+# 1384, Mulgore BoE, Dull Blade
+# 4680, Classic World, Brackwater Cloak
+# 1928, Deadmines Zone, Defias Mage Staff
+# 3569, Razorfen Kraul, Vicar's Robe
+# 6628, Silverpine Rare, Raven's Claws
+# 892, Wetlands, Gnoll Casting Gloves
+# 3076, Wetlands, Smoldering Boots
+# 2226, Duskwood, Ogremage Staff
+# 6202, Elwynn Rare, Fingerless Gloves
+# 4351, Classic World, Pattern: Shadow Hood
+# 1659, N STV, Engineering Gloves
+# 1299, Redridge, Lesser Belt of the Spire
+# 6333, Darkshore Rare, Spikelash Dagger
+# 1219, Redridge, Redridge Machete
+# 1473, Redridge, Riverside Staff
+# 1469, Redridge, Scimitar of Atun
+# 3260, Tirisfal, Scarlet Initiate Robes
+# 3327, Tirisfal, Vile Fin Oracle Staff
+# 2065, Dun Morogh, Rockjaw Blade
+# 4449, Duskwood Rare, Naraxis' Fang
+# 2110, Dun Morogh, Light Magesmith Robe
+# 1300, Redridge, Lesser Staff of the Spire
+# 10553, Dun Morogh, Foreman Vest
+# 3644, Classic World, Barbaric Cloth Bracers
+# 3415, Blackfathom Deeps, Staff of the Friar
+# 201432, Waking Shores, Obsidian Dragontooth
+# 201041, Waking Shores, Citaldel Crusher's Cloak
+# 3229, Redridge Rare, Tarantula Silk Sash
+# 11166, Arathi, Enchant Gloves - Skinning
+# 776, Razorfen Kraul, Vendetta
+# 4668, Classic World, Battle Chain Cloak
+# 32665, TBC World, Crystalweave Cape
+# 7678, Lockpicking 1017, Recipe: Thistle Tea
+# 25331, TBC World, Vengeance Staff
+# 22532, TBC World, Formula: Enchant Bracer - Versatility Prime
+# 31334, TBC World, Staff of Natural Fury
+# 25330, TBC World, Starshine Staff
+# 12552, BRD, Blisterbane Wrap
+# 25142, TBC World, Telaari Longblade
+# 25086, TBC World, Dreamseeker Dandelion
+# 8491, Hillsbrad Foothills, Cat Carrier (Black Tabby)
+# 28280, TBC World, Formula: Enchant Boots - Boar's Speed
+# 2268, Loch Modan, Stonesplinter Blade
+# 24306, TBC World, Pattern: Vengeance Wrap
+# 28279, TBC World, Formula: Enchant Boots - Cat's Swiftness
+# 25326, TBC World, Primal Lore-Staff
+# 24301, TBC World, Pattern: White Remedy Cape
+# 25100, TBC World, Liege Blade
+# 25332, TBC World, Reflective Staff
+# 22558, TBC World, Formula: Enchant Weapon - Spellsurge
+# 1936, Deadmines Zone, Goblin Screwdriver
+# 25174, TBC World, Hanbo Staff
