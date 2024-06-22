@@ -317,8 +317,9 @@ def parse_tsm_data():
 		logging.warning("required/tsm_credentials.txt missing, proceeding without tsm data")
 		return False
 	if tsm_resp.status_code != 200:
-		logging.error("Failted to get TSM data")
-		logging.error(tsm_resp, tsm_resp.reason)
+		logging.error("Failed to get TSM data")
+		logging.error(tsm_resp)
+		logging.error(tsm_resp.reason)
 		return False
 	items = json.loads(tsm_resp.text)
 
@@ -367,7 +368,7 @@ def print_items_pretty(sorted_items):
 	columns = {
 		"id": 2,
 		"name": 4,
-		"diff": 4,
+		"diff": 3,
 		"source": 6,
 		"bid": 3,
 		"buyout": 6,
@@ -433,7 +434,7 @@ def print_items_pretty(sorted_items):
 	table_headers = (
 		f'| {pad_value("ID", columns["id"])}'
 		f' | {pad_value("Name", columns["name"])}'
-		f' | {pad_value("Diff", columns["diff"])}'
+		f' | {pad_value("Dif", columns["diff"])}'
 		f' | {pad_value("Source", columns["source"])}'
 		f' | {pad_value("Bid", columns["bid"])}'
 		f' | {pad_value("Buyout", columns["buyout"])}'
@@ -448,7 +449,7 @@ def print_items_pretty(sorted_items):
 		# if item["item"].id[0] == "P": # a pet
 		# 	f"https://theunderminejournal.com/#{REGION}/{item['realm_slug']}/battlepet/{item['item'].id[1:]}"
 		# else:
-		item["link"] = f"https://undermine.exchange/#{REGION}-{item['realm_slug']}/search/{urllib_quote(item['item'].name)}"
+		item["link"] = f"https://undermine.exchange/#{REGION}-{item['realm_slug']}/search/opt=transmog-mode/{urllib_quote(item['item'].name)}"
 		item["hyperlink_string"] = f"\033]8;;{item['link']}\033\\{item['item'].name}\033]8;;\033\\"
 
 
