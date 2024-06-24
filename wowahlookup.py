@@ -35,6 +35,7 @@ from win10toast import ToastNotifier
 from dataclasses import dataclass
 from blizzard_auth import get_blizzard_header
 from urllib.parse import quote as urllib_quote
+from tsm_data import get_tsm_data
 
 APP_NAME = "wowahlookup"
 DESCRIPTION = "Looks up prices of specific items from chosen AHs"
@@ -78,9 +79,6 @@ item bonuses data is now downloaded from raidbots
 '''
 
 BLIZZARD_HOST = "https://eu.api.blizzard.com/"
-TSM_AUTH = "https://auth.tradeskillmaster.com/oauth2/token"
-TSM_REALM = "https://realm-api.tradeskillmaster.com/"
-TSM_PRICE = "https://pricing-api.tradeskillmaster.com/"
 RAIDBOTS_BONUSES_DATA_HOST = "https://www.raidbots.com/static/data/live/bonuses.json"
 
 @dataclass
@@ -108,27 +106,6 @@ example item in sorted_items as printed by pprint:
   'ratio': 0.07898299798447321,
   'realm': 1084},
 '''
-
-def get_tsm_header():
-	logging.debug(f"Reading required/tsm_credentials.txt")
-	with open(FILE_DIR + "required/tsm_credentials.txt") as c:
-		line = c.readline()
-		stuff = {
-			"client_id": "c260f00d-1071-409a-992f-dda2e5498536",
-			"grant_type": "api_token",
-			"scope": "app:realm-api app:pricing-api",
-			"token": line
-		}
-	
-	x = requests.post(
-		TSM_AUTH, 
-		data=stuff)
-	logging.debug("TSM bearer token obtained")
-	r = json.loads(x.text)
-	if not r.get("access_token", False):
-		raise KeyError("Error getting access token from TSM")
-
-	return {"Authorization": "Bearer " + r["access_token"]}
 
 def get_bonuses():
 	bonuses = 0
@@ -300,42 +277,6 @@ def parse_ahs(item_list, ah_data, market_values=False):
 					})
 		logging.debug(f"Parsed {CONNECTED_REALM_IDS[ah]} items")
 	return out
-
-def parse_tsm_data():
-	match REGION:
-		case "na": r = 1
-		case "eu": r = 2
-	
-	try:
-		bearer = get_tsm_header()
-		logging.info("Downloading TSM AH data")
-		tsm_resp = requests.get(f"{TSM_PRICE}region/{r}", headers=bearer)
-	except requests.exceptions.ConnectionError as e:
-		logging.error("Connection error when attempting to get tsm data, check your internet connection")
-		return e
-	except FileNotFoundError as e:
-		logging.warning("required/tsm_credentials.txt missing, proceeding without tsm data")
-		return False
-	if tsm_resp.status_code != 200:
-		logging.error("Failed to get TSM data")
-		logging.error(tsm_resp)
-		logging.error(tsm_resp.reason)
-		return False
-	items = json.loads(tsm_resp.text)
-
-	logging.debug(f"Parsing TSM data for {REGION.upper()}")
-	tsm_data = {"date": time()}
-	for entry in items:
-		if entry["itemId"]:
-			tsm_data[str(entry["itemId"])] = entry["marketValue"]
-		elif entry["petSpeciesId"]:
-			tsm_data["P" + str(entry["petSpeciesId"])] = entry["marketValue"]
-	logging.info(f"Parsed TSM data for {REGION.upper()}, {len(tsm_data)-1} entries")
-
-	with open(FILE_DIR + "local/tsm_data.json", "w") as f:
-		json.dump(tsm_data, f, indent="\t")
-		logging.debug(f"Wrote TSM data to local/tsm_data.json")
-	return tsm_data
 
 def get_cheapest(items):
 	cheapest = {}
@@ -609,17 +550,7 @@ def print_item_links(sorted_items):
 def main(args):
 	os.makedirs(FILE_DIR+"local", exist_ok=True)
 
-	try:
-		logging.debug("Reading local/tsm_data.json")
-		with open(FILE_DIR + "local/tsm_data.json") as f:
-			tsm_data = json.load(f)
-			if tsm_data["date"] + TSM_DATA_EXPIRE_TIME < time():
-				logging.info("Local TSM data is too old, renewing")
-				raise FileNotFoundError
-			logging.debug("Local TSM data still fresh, reusing")
-	except FileNotFoundError:
-		tsm_data = parse_tsm_data()
-
+	tsm_data = get_tsm_data(REGION, TSM_DATA_EXPIRE_TIME)
 	items = parse_items()
 	ah_data = dl_ah_data_grequests()
 	if type(ah_data) != dict:
