@@ -6,3 +6,4 @@ items.txt
 run.bat
 __pycache__
 import requests.py
+test.py

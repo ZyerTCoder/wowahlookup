@@ -7,7 +7,6 @@
 152084, ABT, Gloves of Abhorrent Strategies, Heroic
 153018, ABT, Corrupted Mantle of the Felseekers
 168602, EP, Cloak of Blessed Depths, Raid Finder
-168602, EP, Cloak of Blessed Depths, Mythic
 190631, SotFO, Vandalized Ephemera Mitts
 190631, SotFO, Vandalized Ephemera Mitts, Fated Normal
 190631, SotFO, Vandalized Ephemera Mitts, Mythic
@@ -52,36 +51,38 @@ P2894, Revendreth, Burdened Soul
 P1563, Blasted Lands, Bronze Whelpling
 P42, Hillsbrad Foothills, Black Tabby Cat
 P234, Zul'drak, Gundrak Hatchling
+P1331, SoO, Droplet of Y'Shaarj
 
 # Toys
 
 # World Drops
 1728, Classic World, Teebu's Blazing Longsword
 9718, Classic World, Reforged Blade of Heroes
-9719, Classic World, Broken Blade of Heroes
 2787, Dun Morogh, Trogg Dagger
 2620, Desolace BoE, Augural Shroud
 16252, Eastearn Plaguelands, Enchant Weapon - Crusader
 23923, Ghostlands Chest, Amani Sacrificial Dagger
 11152, Hillsbrad Foothills, Enchant Gloves - Fishing
 5107, N Barrens, Deckhand's Shirt
-32540, Terokk, Terokk's Might
 23923, Ghostlands Treasure, Amani Sacrificial Dagger
-31340, TBC World, Will of Edward the Odd
 31336, TBC World, Blade of Wizardry
 31331, TBC World, The Night Blade
-31289, TBC World, Staff of Divine Infusion
 30733, TBC Kazzak, Hope Ender
 43613, Wrath World, The Dusk Blade
 43611, Wrath World, Krol Cleaver
 48116, Zul'drak, Gundrak Hatchling
 44703, Howling Fjord Fishing, Dark Herring
 34829, Garrison Fish, Ornate Drinking Stein
+66924, Cata World, Petrified Camel Haunch
+66880, Cata World, Potentate's Letter Opener
+66916, Cata World, Delicate Blade of Meaning
+66960, Cata World, Dirk's Command
+67052, Cata World, Loyal Blade
+67104, Cata World, Torchlight Wand
 159840, BFA World, Teebu's Scorching Straight Sword
 187097, Korthia, Construct's Shoulderplates
 187024, Korthia, Necromancer's Mantle
 201031, DF World, Nokhudon Cloak
-194262, Thaldraszus, Pattern: Temporal Spellthread
 
 # 10.1.7 BoEs
 4476, Duskwood Rare, Beastwalker Robe
@@ -96,7 +97,6 @@ P234, Zul'drak, Gundrak Hatchling
 5092, S Barrens, Charred Razormane Wand
 1493, 1k Needles, Heavy Marauder Scimitar
 4437, Silverpine Rare, Channeler's Staff
-10554, Dun Morogh, Foreman Pants
 2114, Dun Morogh, Snowy Robe
 5775, Hillsbrad Foothills, Pattern: Black Silk Pack
 4767, Hillsbrad Foothills, Coppercloth Gloves
@@ -275,3 +275,10 @@ P234, Zul'drak, Gundrak Hatchling
 # 22558, TBC World, Formula: Enchant Weapon - Spellsurge
 # 1936, Deadmines Zone, Goblin Screwdriver
 # 25174, TBC World, Hanbo Staff
+# 194262, Thaldraszus, Pattern: Temporal Spellthread
+# 31340, TBC World, Will of Edward the Odd
+# 32540, Terokk, Terokk's Might
+# 31289, TBC World, Staff of Divine Infusion
+# 168602, EP, Cloak of Blessed Depths, Mythic
+# 10554, Dun Morogh, Foreman Pants
+# 9719, Classic World, Broken Blade of Heroes

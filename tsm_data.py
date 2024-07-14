@@ -40,8 +40,10 @@ def get_tsm_data(region, expire_time=86400*2):
 				logging.debug("Local TSM data still fresh, reusing")
 				return tsm_data
 	except FileNotFoundError:
+		logging.debug("No local data found, redownloading")
 		pass
 	except json.decoder.JSONDecodeError:
+		logging.debug("Local data corrupted, redownloading")
 		pass
 
 	region = region.upper()
@@ -81,3 +83,7 @@ def get_tsm_data(region, expire_time=86400*2):
 		json.dump(tsm_data, f, indent="\t")
 		logging.debug(f"Wrote TSM data to local/tsm_data.json")
 	return tsm_data
+
+if __name__ == '__main__':
+	logging.getLogger().setLevel(logging.DEBUG)
+	print(get_tsm_data("eu"))
