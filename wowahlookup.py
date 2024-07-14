@@ -286,8 +286,8 @@ def get_cheapest(items):
 			if identifier not in cheapest:
 				cheapest[identifier] = item
 			else:
-				if item["auction"]["buyout"] < cheapest[identifier]["auction"]["buyout"]:
-					cheapest[identifier]["auction"]["buyout"] = item["auction"]["buyout"]
+				if item["auction"].get("buyout", 10e11) < cheapest[identifier]["auction"]["buyout"]:
+					cheapest[identifier]["auction"]["buyout"] = item["auction"].get("buyout", 10e11)
 					cheapest[identifier]["realm"] = item["realm"]
 				if item["auction"].get("bid", float("inf")) < cheapest[identifier]["auction"].get("bid", float("inf")):
 					cheapest[identifier]["auction"]["bid"] = item["auction"].get("bid")
