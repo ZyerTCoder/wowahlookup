@@ -78,7 +78,6 @@ P1331, SoO, Droplet of Y'Shaarj
 66916, Cata World, Delicate Blade of Meaning
 66960, Cata World, Dirk's Command
 67052, Cata World, Loyal Blade
-67104, Cata World, Torchlight Wand
 159840, BFA World, Teebu's Scorching Straight Sword
 187097, Korthia, Construct's Shoulderplates
 187024, Korthia, Necromancer's Mantle
@@ -282,3 +281,4 @@ P1331, SoO, Droplet of Y'Shaarj
 # 168602, EP, Cloak of Blessed Depths, Mythic
 # 10554, Dun Morogh, Foreman Pants
 # 9719, Classic World, Broken Blade of Heroes
+# 67104, Cata World, Torchlight Wand
