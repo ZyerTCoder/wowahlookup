@@ -22,13 +22,14 @@ rewrite in the image of raidbots one
 also make is so if you cant download and there is an old local one, use it anyway
 '''
 
+from datetime import datetime
 import grequests
 import os
 import sys
 import traceback
 import argparse
 import logging
-from time import perf_counter, time
+from time import perf_counter, time, sleep
 import requests
 import json
 from win10toast import ToastNotifier
@@ -76,6 +77,9 @@ fixed urls to use undermine.exchange instead
 added TSM_DATA_EXPIRE_TIME as a global at the start of the file
 v1.10
 item bonuses data is now downloaded from raidbots
+v1.11
+split getting regional tsm data to a separate file
+auto mode now uses the If-Modified-Since header and tries for updates more often
 '''
 
 BLIZZARD_HOST = "https://eu.api.blizzard.com/"
@@ -190,12 +194,15 @@ def dl_ah_data():
 	
 	return ah_data
 
-def dl_ah_data_grequests():
+def dl_ah_data_grequests(if_modified_since=False):
 	try:
 		bearer, params = get_blizzard_header(REGION)
 	except requests.exceptions.ConnectionError as e:
 		logging.error("Connection error when attempting to get blizzard auths, check your internet connection")
 		return e
+	
+	if if_modified_since:
+		bearer["If-Modified-Since"] = "Tue, 16 Jul 2024 00:26:49 GMT"
 
 	error_flag = False
 	def e_handler(request, e):
@@ -216,12 +223,26 @@ def dl_ah_data_grequests():
 	
 	print("Requesting AH data from blizzard")
 	ah_data = {}
+	last_modified = {}
 	for resp, (ah, ah_name) in zip(grequests.map(rs, exception_handler=e_handler), CONNECTED_REALM_IDS.items()):
 		if error_flag:
 			return -1
-		ah_data[ah] = json.loads(resp.text)["auctions"]
-		logging.info(f"There are {len(ah_data[ah])} items for auction in {ah_name}")
+		
+		if resp.status_code == 200:
+			last_modified[ah] = resp.headers["last-modified"]
+			ah_data[ah] = json.loads(resp.text)["auctions"]
+			logging.info(f"There are {len(ah_data[ah])} items for auction in {ah_name}")
+		elif resp.status_code == 304:
+			return 304
+		else:
+			logging.error(f"Unhandled grequest response: {resp.status_code=}")
+			return -1
+		
 
+	with open(FILE_DIR + "local/last_modified.json", "w") as f:
+		json.dump(last_modified, f, indent="\t")
+	logging.debug(f"Wrote to local/last_modified.json")
+			
 	return ah_data
 
 def parse_ahs(item_list, ah_data, market_values=False):
@@ -425,10 +446,16 @@ def send_windows_toast(msg):
 	toaster.show_toast("WoWAHLookUp", msg, duration=10)
 
 def check_low_ratio(sorted_items):
+	logging.debug("Checking if there are any deals")
 	msg = ""
 	for item in sorted_items:
 		if item["ratio"] > RATIO_NOTIF_THRESHOLD:
-			print(msg) if msg != "" else print("No good prices found")
+			if msg != "":
+				print(msg)
+			else:
+				print("No good prices found")
+				return
+			
 			try:
 				logging.debug("Reading local/last_email.txt")
 				with open(FILE_DIR + "local/last_email.txt") as f:
@@ -558,10 +585,10 @@ def main(args):
 		return -1
 
 	relevant_items = parse_ahs(items, ah_data, market_values=tsm_data)
-	
 	if type(relevant_items) != dict:
 		logging.error(f"Error when parsing AH data: {relevant_items}")
 		return -1
+	
 	cheapest = get_cheapest(relevant_items)
 	populate_ratios(cheapest)
 
@@ -610,6 +637,41 @@ def main(args):
 					)
 	else:
 		check_low_ratio(sorted_items)
+
+		while True:
+			# check every 1 minute after 50m since last update
+			last_modified_unix = os.path.getmtime(FILE_DIR + "local/last_modified.json")
+			if last_modified_unix + 60*50 > time():
+				time_to_wait = last_modified_unix + 60*50 - time()
+				dt = datetime.fromtimestamp(last_modified_unix + 60*50)
+				logging.info(f"AH data is recent enough sleeping until {dt.hour}:{dt.minute}")
+				sleep(time_to_wait)
+			
+			logging.debug(f"Reading local/last_modified.json")
+			with open(FILE_DIR + "local/last_modified.json") as f:
+				last_modified = next(iter(json.load(f)))
+				print(last_modified)
+
+			logging.debug("Checking for updated AH data")
+			while True:
+				ah_data = dl_ah_data_grequests(last_modified)
+				if ah_data == 304:
+					logging.info("AH data not updated yet, checking again in 60s")
+					sleep(60)
+				elif type(ah_data) != dict:
+					logging.error("No AH data available, trying again in 5 minutes")
+					sleep(300)
+				else:
+					relevant_items = parse_ahs(items, ah_data, market_values=tsm_data)
+					if type(relevant_items) != dict:
+						logging.error(f"Error when parsing AH data: {relevant_items}")
+						return -1
+					
+					cheapest = get_cheapest(relevant_items)
+					populate_ratios(cheapest)
+					sorted_items = sorted(cheapest.values(), key=byratio)
+					check_low_ratio(sorted_items)
+
 
 if __name__ == '__main__':
 	t0 = perf_counter()
