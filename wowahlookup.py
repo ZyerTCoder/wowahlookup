@@ -10,6 +10,7 @@ REGION = "eu" # eu/us
 ITEM_LIST = "items.txt"
 TSM_DATA_EXPIRE_TIME = 86400 * 2
 RAIDBOTS_BONUSES_DATA_EXPIRE_TIME = 86400 * 14
+TIME_FIRST_CHECK_SINCE_LAST_MODIFIED = 60*55
 
 '''
 required/tsm_credentials.txt should contain only the tsm api key
@@ -202,7 +203,7 @@ def dl_ah_data_grequests(if_modified_since=False):
 		return e
 	
 	if if_modified_since:
-		bearer["If-Modified-Since"] = "Tue, 16 Jul 2024 00:26:49 GMT"
+		bearer["If-Modified-Since"] = if_modified_since
 
 	error_flag = False
 	def e_handler(request, e):
@@ -636,21 +637,22 @@ def main(args):
 						sep="\n"
 					)
 	else:
+		print_items_pretty(sorted_items[:5])
 		check_low_ratio(sorted_items)
 
 		while True:
 			# check every 1 minute after 50m since last update
 			last_modified_unix = os.path.getmtime(FILE_DIR + "local/last_modified.json")
-			if last_modified_unix + 60*50 > time():
-				time_to_wait = last_modified_unix + 60*50 - time()
-				dt = datetime.fromtimestamp(last_modified_unix + 60*50)
-				logging.info(f"AH data is recent enough sleeping until {dt.hour}:{dt.minute}")
+			if last_modified_unix + TIME_FIRST_CHECK_SINCE_LAST_MODIFIED > time():
+				time_to_wait = last_modified_unix + TIME_FIRST_CHECK_SINCE_LAST_MODIFIED - time()
+				dt = datetime.fromtimestamp(last_modified_unix + TIME_FIRST_CHECK_SINCE_LAST_MODIFIED)
+				logging.info(f"AH data is recent enough sleeping until {dt.strftime("%H:%M")}")
 				sleep(time_to_wait)
 			
 			logging.debug(f"Reading local/last_modified.json")
 			with open(FILE_DIR + "local/last_modified.json") as f:
-				last_modified = next(iter(json.load(f)))
-				print(last_modified)
+				d = json.load(f)
+				last_modified = d[next(iter(d))]
 
 			logging.debug("Checking for updated AH data")
 			while True:
@@ -670,7 +672,9 @@ def main(args):
 					cheapest = get_cheapest(relevant_items)
 					populate_ratios(cheapest)
 					sorted_items = sorted(cheapest.values(), key=byratio)
+					print_items_pretty(sorted_items[:5])
 					check_low_ratio(sorted_items)
+					break
 
 
 if __name__ == '__main__':
